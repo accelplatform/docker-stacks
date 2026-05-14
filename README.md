@@ -1,10 +1,50 @@
-# Standalone 構成
+# Accel Platform Docker stacks
 
 ## 概要
 
 Docker を利用した Accel Platform を動作させるためのスタンドアロン構成を提供します。
+ビルドを行い war ファイルや静的ファイルを生成する事ができます。JDK のインストール等も不要です。
+`mailpit`を組み込んでいる為、メール送信の確認が容易に行えます。
 
-### 構成
+## 構成とバージョン
+
+Accel Platform Docker stacks は、初期設定の状態で下記バージョンの環境を構築します。
+
+- intra-mart Accel Platform Professional Edition 2026 Spring
+  - IM-FormaDesigner 8.0.38
+  - IM-BIS 8.0.36
+  - IM-BloomMaker 8.0.16
+  - AccelStudio 8.0.9
+- PostgreSQL 17
+
+## 前提条件
+
+- カスタマーサクセスライセンスを有していること
+  - [intra-mart Accel Platform セットアップガイド - ライセンスについて](https://document.intra-mart.jp/library/iap/public/setup/iap_setup_guide/texts/license_registration/index.html#license-type)
+- `Git` がインストールされていること
+  - [git - Install](https://git-scm.com/install/windows)
+- `Git LFS` がインストールされていること
+  - [git-lfs](https://github.com/git-lfs/git-lfs/wiki/Installation)
+- `Docker` がインストールされていること
+  - [dockerdocs - Install Docker Desktop on Windows](https://docs.docker.com/desktop/setup/install/windows-install/)
+
+### Tips
+
+プロキシ環境に構築する場合は、Git、Docker Desktopにプロキシ設定が必要となるケースもあります。
+`git clone` や `docker compose build` 、 `docker compose up` コマンドで失敗する場合はプロキシ設定をご確認ください。
+
+- Git  
+  コマンドでプロキシサーバの情報を設定します。  
+  設定例
+  ```
+  git config --global http.proxy http://proxy:port
+  git config --global https.proxy http://proxy:port
+  ```
+- Docker Desktop  
+  環境に合わせて以下を適宜設定します
+  Docker Desktop UI の settings > Resources > Proxies で設定。
+
+## 構成
 
 ```
         ┌───────┐
@@ -30,7 +70,7 @@ Docker を利用した Accel Platform を動作させるためのスタンドア
 - juggling-build-war: war, 静的ファイルのビルド
 - extract-imm: ユーザモジュール追加用
 
-## Dockerクローン
+## クローン
 
 下記コマンドを実行することにより、Gitからリポジトリがクローンされます
 `Docker Desktop` を利用する場合、PowerShell等のターミナルから実行してください。
@@ -40,14 +80,7 @@ Docker を利用した Accel Platform を動作させるためのスタンドア
 git clone #TODO#
 ```
 
-`Standalone` 構成を使用する場合、`accelplatform-docker-stacks/standalone` をカレントディレクトリとします。
-
-```sh
-# カレントディレクトリの移動
-cd accelplatform-docker-stacks/standalone
-```
-
-[Git LFS](../README.md#前提条件)をインストールしていない場合、standalone/imm/lib、standalone/juggling-build-war/libが正しくダウンロードできず、サイズが非常に小さいファイルになることがあります。  
+[Git LFS](../README.md#前提条件)をインストールしていない場合、imm/lib、juggling-build-war/libが正しくダウンロードできず、サイズが非常に小さいファイルになることがあります。  
 lib配下のファイルサイズが極端に小さい場合は、LFSがインストール、初期化されているかをご確認ください。
 
 ## 資材の準備
@@ -61,24 +94,24 @@ lib配下のファイルサイズが極端に小さい場合は、LFSがイン�
 - solr.zip
 
 ```
-accelplatform-docker-stacks/
-└── standalone/
-    ├── accelstudio-testing-agent/
-    │   └── accel_studio_testing_agent-8.0.2.zip
-    ├── resin/
-    │   └── resin-pro-4.0.67.tar.gz
-    ├── cassandra/
-    │   └── apache-cassandra-1.1.12-bin.tar.gz
-    └── solr/
-        └── solr.zip
+
+docker-stacks/
+├── accelstudio-testing-agent/
+│   └── accel_studio_testing_agent-8.0.2.zip
+├── resin/
+│   └── resin-pro-4.0.67.tar.gz
+├── cassandra/
+│   └── apache-cassandra-1.1.12-bin.tar.gz
+└── solr/
+    └── solr.zip
 ```
 
 ### Tips
 
-- プロキシ環境の場合、standalone/resin/overwrite/conf ディレクトリの resin.properties もしくは resin.xml にプロキシの設定が必要なケースがあります。  
+- プロキシ環境の場合、resin/overwrite/conf ディレクトリの resin.properties もしくは resin.xml にプロキシの設定が必要なケースがあります。  
   外部サービスとの接続に失敗する場合は以下を確認してください。
   - [プロキシ環境下で intra-mart AccelPlatform から外部サイトにアクセスする方法を教えてください。](https://product.intra-mart.support/hc/ja/articles/20083075832473-%E3%83%97%E3%83%AD%E3%82%AD%E3%82%B7%E7%92%B0%E5%A2%83%E4%B8%8B%E3%81%A7-intra-mart-AccelPlatform-%E3%81%8B%E3%82%89%E5%A4%96%E9%83%A8%E3%82%B5%E3%82%A4%E3%83%88%E3%81%AB%E3%82%A2%E3%82%AF%E3%82%BB%E3%82%B9%E3%81%99%E3%82%8B%E6%96%B9%E6%B3%95%E3%82%92%E6%95%99%E3%81%88%E3%81%A6%E3%81%8F%E3%81%A0%E3%81%95%E3%81%84)
-- Cassandra、Solrの資材を設置せず[コンテナのビルド](#コンテナのビルド)を実施するとエラーとなります。環境に含めない場合は、`standard/compose.yaml` の `cassandra` `solr` サービス全体と、`resin` - `depends_on` の `cassandra` `solr` をコメントアウトすることで、ビルド、サービス起動から除外できます。
+- Cassandra、Solrの資材を設置せず[コンテナのビルド](#コンテナのビルド)を実施するとエラーとなります。環境に含めない場合は、 compose.yaml の `cassandra` `solr` サービス全体と、`resin` - `depends_on` の `cassandra` `solr` をコメントアウトすることで、ビルド、サービス起動から除外できます。
 
 ## コンテナのセットアップ
 
@@ -95,8 +128,8 @@ docker compose build --no-cache juggling-build-war
 
 #### war, 静的ファイルのビルド
 
-以下のコマンドにより `standalone/data/juggling/project` 配下の構成で war ファイルや静的ファイルをビルドする事ができます。
-`standalone/data/juggling/project` には初期状態でプロジェクトが構成されているため、実行すると[初期設定の構成](../README.md#構成とバージョン)で war が作成されます。war は単体テスト環境でビルドされます。
+以下のコマンドにより `data/juggling/project` 配下の構成で war ファイルや静的ファイルをビルドする事ができます。  
+`data/juggling/project` には初期状態でプロジェクトが構成されているため、実行すると[初期設定の構成](../README.md#構成とバージョン)で war が作成されます。war は単体テスト環境でビルドされます。
 
 juggling プロジェクトを差し替える場合は[ユーザ作成のJugglingプロジェクトを適用する場合](#ユーザ作成のjugglingプロジェクトを適用する場合)を参照してください。
 
@@ -211,21 +244,20 @@ docker compose logs -f accelstudio-testing-agent
 
 ### プロジェクトの配置
 
-ユーザが作成したJugglingプロジェクトで環境を作成する場合は、`accelplatform-docker-stacks/standalone/data/juggling/project` 配下を削除した上で、`project` ディレクトリ配下に juggling プロジェクトのフォルダ、ファイルをコピーします。
+ユーザが作成したJugglingプロジェクトで環境を作成する場合は、`data/juggling/project` 配下を削除した上で、`project` ディレクトリ配下に juggling プロジェクトのフォルダ、ファイルをコピーします。
 
 ```
-accelplatform-docker-stacks/
-└── standalone/
-    └── data/
-        └── juggling/
-            └── project/
-                ├── juggling.im
-                ├── resin-web.xml
-                ├── classes/
-                ├── conf/
-                ├── lib/
-                ├── modules/
-                └── schema/
+docker-stacks/
+└── data/
+    └── juggling/
+        └── project/
+            ├── juggling.im
+            ├── resin-web.xml
+            ├── classes/
+            ├── conf/
+            ├── lib/
+            ├── modules/
+            └── schema/
 ```
 
 上記の構成の通り、Juggling プロジェクトの直下に以下のファイルが配置される必要があります。
@@ -326,12 +358,11 @@ docker compose build --no-cache extract-imm
 `data/juggling/additional-modules`配下に独自に作成されたユーザモジュール（immファイル）を配置して下さい。
 
 ```
-accelplatform-docker-stacks/
-└── standalone/
-    └── data/
-        └── juggling/
-            └── additional-modules/
-                └── <ユーザモジュール>.imm
+docker-stacks/
+└── data/
+    └── juggling/
+        └── additional-modules/
+            └── <ユーザモジュール>.imm
 ```
 
 以下のコマンドを実行することにより、ユーザモジュールを `data/juggling/public` 及び `data/juggling/war` に展開します。
