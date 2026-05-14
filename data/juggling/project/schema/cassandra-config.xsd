@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema targetNamespace="http://www.intra-mart.jp/imbox/cassandra-config"
+	elementFormDefault="qualified" xmlns="http://www.w3.org/2001/XMLSchema"
+	xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" jaxb:version="2.0"
+	xmlns:c="http://www.intra-mart.jp/imbox/cassandra-config">
+
+	<annotation>
+		<appinfo>
+			<jaxb:schemaBindings>
+				<jaxb:package name="jp.co.intra_mart.imbox.internal.cassandra.config" />
+			</jaxb:schemaBindings>
+		</appinfo>
+	</annotation>
+
+
+
+	<element name="cassandra-config">
+		<complexType>
+			<sequence>
+				<element name="cluster-name" type="string" minOccurs="1" maxOccurs="1" />
+				<element name="replication-factor" type="int" />
+				<element name="keyspace" type="string" minOccurs="0" maxOccurs="1" default="default" />
+				<element name="authentication" type="c:AuthenticationType" minOccurs="0" maxOccurs="1" />
+				<element name="hosts" type="c:HostsType" minOccurs="1" maxOccurs="1" />
+			</sequence>
+		</complexType>
+	</element>
+
+
+	<complexType name="AuthenticationType">
+		<sequence>
+			<element name="username" type="string" minOccurs="1" maxOccurs="1" />
+			<element name="password" type="string" minOccurs="1" maxOccurs="1" />
+		</sequence>
+		<attribute name="enabled" type="boolean" default="true" use="optional" />
+	</complexType>
+
+
+	<complexType name="HostsType">
+		<sequence>
+			<element name="host" type="string" minOccurs="1" maxOccurs="unbounded" />
+		</sequence>
+	</complexType>
+</schema>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<im-copilot-action-config xmlns="https://www.intra-mart.jp/im-copilot/im-copilot-action-config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://www.intra-mart.jp/im-copilot/im-copilot-action-config ../schema/im-copilot-action-config.xsd ">
+
+  <!-- Action Setting for Common to Tenants -->
+  <default-actions>
+    <action type="chat" driver-type="open-ai" />
+    <action type="images-generations" driver-type="open-ai" />
+    <action type="embeddings" driver-type="open-ai" />
+    <action type="audio-transcriptions" driver-type="open-ai" />
+    <action type="audio-speech" driver-type="open-ai" />
+  </default-actions>
+
+  <!-- Action Setting for foo Tenant -->
+  <actions tenant="foo">
+    <action type="chat" driver-type="azure-open-ai" />
+    <action type="images-generations" driver-type="azure-open-ai" />
+    <action type="embeddings" driver-type="azure-open-ai" />
+    <action type="audio-transcriptions" driver-type="azure-open-ai" />
+    <action type="audio-speech" driver-type="open-ai" />
+  </actions>
+
+  <!-- Action Setting for bar Tenant -->
+  <actions tenant="bar">
+    <action type="chat" driver-type="azure-open-ai" />
+    <action type="images-generations" driver-type="open-ai" />
+    <action type="embeddings" driver-type="azure-open-ai" />
+    <action type="audio-transcriptions" driver-type="open-ai" />
+    <action type="audio-speech" driver-type="open-ai" />
+  </actions>
+
+</im-copilot-action-config>

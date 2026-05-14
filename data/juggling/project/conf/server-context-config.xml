@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<server-context-config
+    xmlns="http://intra-mart.co.jp/system/platform/config/server-context-config"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://intra-mart.co.jp/system/platform/config/server-context-config ../schema/server-context-config.xsd">
+
+  <home-directory>WEB-INF</home-directory>
+  <work-directory>/data/imart/work</work-directory>
+  <log-directory>/data/imart/log</log-directory>
+  <server-charset>UTF-8</server-charset>
+
+  <!-- base url. -->
+  <!--
+  <base-url>http://127.0.0.1:8080/imart</base-url>
+  -->
+
+</server-context-config>

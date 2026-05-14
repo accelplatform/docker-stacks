@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<solr-config xmlns="http://intra-mart.co.jp/system/solr/config/solr-config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://intra-mart.co.jp/system/solr/config/solr-config ../schema/solr-config.xsd ">
+
+    <group name="default">
+        <searcher>
+            <method>POST</method>
+            <distribution-policy>FIRST</distribution-policy>
+            <servers>
+                <url>http://solr:8983/solr/default</url>
+            </servers>
+        </searcher>
+        <indexer>
+            <distribution-policy>IDHASH</distribution-policy>
+            <servers>
+                <url>http://solr:8983/solr/default</url>
+            </servers>
+        </indexer>
+        <extractor ref="" />
+    </group>
+    <group name="default_vector">
+        <searcher>
+            <method>POST</method>
+            <distribution-policy>FIRST</distribution-policy>
+            <servers>
+                <url>http://solr:8983/solr/default_vector</url>
+            </servers>
+        </searcher>
+        <indexer>
+            <distribution-policy>IDHASH</distribution-policy>
+            <servers>
+                <url>http://solr:8983/solr/default_vector</url>
+            </servers>
+        </indexer>
+        <extractor ref="" />
+    </group>
+
+</solr-config>
