@@ -121,6 +121,8 @@ docker-stacks/
 下記コマンドを実行することにより、コンテナイメージの作成が行われます。
 
 ```sh
+# カレントディレクトリをdocker-stacksにする
+cd docker-stacks
 # メイン（resin、httpd、sqlserver等）
 docker compose build --no-cache
 # war作成＋静的ファイル配置
