@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://jp/co/intra-mart/foundation/service/client/file/config" xmlns:tns="http://jp/co/intra-mart/foundation/service/client/file/config" elementFormDefault="qualified">
+
+<element name="storage-config">
+  <complexType>
+    <sequence>
+      <element name="charset" type="string"/>
+      <element name="class-name" type="string"/>
+      <element name="unable-charactors" type="tns:storage-unable-charactors"/>
+      <element name="storage-info" type="tns:storage-storage-info"/>
+      <element name="synchronize-info" type="tns:storage-synchronize-info"/>
+      <element name="permit-symlink" type="boolean" minOccurs="0" maxOccurs="1"/>
+    </sequence>
+  </complexType>
+</element>
+
+<complexType name="storage-storage-info">
+  <all>
+    <element name="root-path-name" type="string"/>
+    <element name="system-directory-name" type="string"/>
+    <element name="public-directory-name" type="string"/>
+    <element name="group-directory-name" type="string"/>
+    <element name="configuration-directory-name" type="string"/>
+    <element name="conpatible-directory-name" type="string"/>
+    <element name="storage-directory-name" type="string"/>
+    <element name="temporary-directory-name" type="string"/>
+  </all>
+</complexType>
+
+<complexType name="storage-synchronize-info">
+  <all>
+    <element name="synchronize-key" type="string"/>
+  </all>
+</complexType>
+
+<complexType name="storage-unable-charactors">
+  <sequence>
+      <element name="unable-charactor" type="string" maxOccurs="unbounded" minOccurs="0"/>
+  </sequence>
+</complexType>
+
+</schema>

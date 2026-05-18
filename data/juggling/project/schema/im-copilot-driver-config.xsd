@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  attributeFormDefault="unqualified"
+  elementFormDefault="qualified"
+  targetNamespace="https://www.intra-mart.jp/im-copilot/im-copilot-driver-config"
+  xmlns:cd="https://www.intra-mart.jp/im-copilot/im-copilot-driver-config"
+  xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" jaxb:version="2.0"
+  >
+
+  <xs:annotation>
+    <xs:appinfo>
+      <jaxb:schemaBindings>
+        <jaxb:package name="jp.co.intra_mart.system.copilot.config.driver"/>
+      </jaxb:schemaBindings>
+    </xs:appinfo>
+  </xs:annotation>
+
+  <xs:element name="im-copilot-driver-config">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="default-drivers" type="cd:default-drivers" minOccurs="0" maxOccurs="1" />
+        <xs:element name="drivers" type="cd:drivers" minOccurs="0" maxOccurs="unbounded" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:complexType name="default-drivers">
+    <xs:sequence>
+      <xs:element name="driver" type="cd:driver" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="drivers">
+    <xs:sequence>
+      <xs:element name="driver" type="cd:driver" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
+    <xs:attribute name="tenant" type="xs:string" use="required" />
+  </xs:complexType>
+  
+  <xs:complexType name="driver">
+    <xs:all>
+      <xs:element name="api-key" type="xs:string" minOccurs="0" maxOccurs="1" />
+      <xs:element name="base-url" type="xs:string" minOccurs="0" maxOccurs="1" />
+      <xs:element name="organization" type="xs:string" minOccurs="0" maxOccurs="1" />
+      <xs:element name="api-version" type="xs:string" minOccurs="0" maxOccurs="1" />
+      <xs:element name="retry-count" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="1" />
+      <xs:element name="retry-wait" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="1" />
+      <xs:element name="aws-region" type="xs:string" minOccurs="0" maxOccurs="1" />
+      <xs:element name="aws-credentials-profile" type="xs:string" minOccurs="0" maxOccurs="1" />
+      <xs:element name="aws-credentials-static" type="cd:aws-credentials-static" minOccurs="0" maxOccurs="1" />
+      <xs:element name="aws-credentials-iam-role-arn" type="xs:string" minOccurs="0" maxOccurs="1" />
+      <xs:element name="parameters" type="cd:parametersType" minOccurs="0" maxOccurs="1" />
+    </xs:all>
+    <xs:attribute name="type" type="xs:string" use="required" />
+  </xs:complexType>
+
+  <xs:complexType name="aws-credentials-static">
+    <xs:sequence>
+      <xs:element name="access-key" type="xs:string" minOccurs="1" maxOccurs="1" />
+      <xs:element name="secret-key" type="xs:string" minOccurs="1" maxOccurs="1" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="parametersType">
+    <xs:sequence>
+      <xs:element name="parameter" maxOccurs="unbounded">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="parameter-name" type="xs:string" minOccurs="1" maxOccurs="1" />
+            <xs:element name="parameter-value" type="xs:string" minOccurs="1" maxOccurs="1" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+</xs:schema>

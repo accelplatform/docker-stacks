@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  attributeFormDefault="unqualified"
+  elementFormDefault="qualified"
+  targetNamespace="https://www.intra-mart.jp/im-copilot/im-copilot-action-config"
+  xmlns:cd="https://www.intra-mart.jp/im-copilot/im-copilot-action-config"
+  xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" jaxb:version="2.0"
+  >
+
+  <xs:annotation>
+    <xs:appinfo>
+      <jaxb:schemaBindings>
+        <jaxb:package name="jp.co.intra_mart.system.copilot.config.action"/>
+      </jaxb:schemaBindings>
+    </xs:appinfo>
+  </xs:annotation>
+
+  <xs:element name="im-copilot-action-config">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="default-actions" type="cd:default-actions" minOccurs="0" maxOccurs="1" />
+        <xs:element name="actions" type="cd:actions" minOccurs="0" maxOccurs="unbounded" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:complexType name="default-actions">
+    <xs:sequence>
+      <xs:element name="action" type="cd:action" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="actions">
+    <xs:sequence>
+      <xs:element name="action" type="cd:action" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
+    <xs:attribute name="tenant" type="xs:string" use="required" />
+  </xs:complexType>
+  
+  <xs:complexType name="action">
+    <xs:attribute name="type" type="xs:string" use="required" />
+    <xs:attribute name="driver-type" type="xs:string" use="required" />
+  </xs:complexType>
+</xs:schema>

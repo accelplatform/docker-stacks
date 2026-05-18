@@ -1,0 +1,30 @@
+<web-app xmlns="http://caucho.com/ns/resin"
+  xmlns:resin="urn:java:com.caucho.resin">
+  <character-encoding>UTF-8</character-encoding>
+
+  <log-handler name="" class="jp.co.intra_mart.common.platform.log.handler.JDKLoggingOverIntramartLoggerHandler"/>
+  <logger name="debug.com.sun.portal" level="warning" />
+
+  <!-- im_service(im_asynchronous) -->
+  <resource jndi-name="jca/work" type="jp.co.intra_mart.system.asynchronous.impl.executor.work.resin.ResinResourceAdapter" />
+  <jsp>
+    <recycle-tags>false</recycle-tags>
+  </jsp>
+  <database jndi-name="jdbc/default">
+    <driver>
+      <type>com.microsoft.sqlserver.jdbc.SQLServerConnectionPoolDataSource</type>
+      <url>jdbc:sqlserver://sqlserver:1433;DatabaseName=master;encrypt=false</url>
+      <user>imart</user>
+      <password>Str0ng!Pass123</password>
+      <selectMethod>cursor</selectMethod>
+    </driver>
+    <max-connections>20</max-connections>
+    <prepared-statement-cache-size>0</prepared-statement-cache-size>
+  </database>
+  <session-config>
+    <reuse-session-id>false</reuse-session-id>
+    <session-timeout>120</session-timeout>
+  </session-config>
+
+  <mime-mapping extension=".json" mime-type="application/json"/>
+</web-app>
