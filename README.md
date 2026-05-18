@@ -97,14 +97,14 @@ lib配下のファイルサイズが極端に小さい場合は、LFSがイン�
 
 ```
 docker-stacks/
-  ├── accelstudio-testing-agent/
-  │   └── accel_studio_testing_agent-8.0.2.zip
-  ├── resin/
-  │   └── resin-pro-4.0.67.tar.gz
-  ├── cassandra/
-  │   └── apache-cassandra-1.1.12-bin.tar.gz
-  └── solr/
-      └── solr.zip
+├── accelstudio-testing-agent/
+│   └── accel_studio_testing_agent-8.0.2.zip
+├── resin/
+│   └── resin-pro-4.0.67.tar.gz
+├── cassandra/
+│   └── apache-cassandra-1.1.12-bin.tar.gz
+└── solr/
+    └── solr.zip
 ```
 
 OracleのJDBCドライバ（Oracle Database 26ai - JDK11 - JDBC 4.3）を公式からダウンロードして以下の通りディレクトリに配置します。  
