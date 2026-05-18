@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+    targetNamespace="http://intra-mart.co.jp/system/platform/config/server-context-config" 
+    xmlns:tns="http://intra-mart.co.jp/system/platform/config/server-context-config" 
+    xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" jaxb:version="2.0"
+    elementFormDefault="qualified">
+
+<annotation>
+  <appinfo>
+    <jaxb:schemaBindings>
+      <jaxb:package name="jp.co.intra_mart.system.platform.config"/>
+    </jaxb:schemaBindings>
+  </appinfo>
+</annotation>
+
+<element name="server-context-config">
+  <complexType>
+    <sequence>
+      <element name="home-directory" type="string"/>
+      <element name="work-directory" type="string"/>
+      <element name="log-directory" type="string"/>
+      <element name="server-charset" type="string"/>
+      <element name="base-url" type="string" minOccurs="0" maxOccurs="1"/>
+    </sequence>
+  </complexType>
+</element>
+
+</schema>

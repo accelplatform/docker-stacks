@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<javamail-config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://intra-mart.co.jp/system/mail/javamail/config/javamail-config"
+    xsi:schemaLocation="http://intra-mart.co.jp/system/mail/javamail/config/javamail-config ../../schema/javamail-config.xsd ">
+
+  <smtp>
+    <smtp-server id="default" host="mailpit" port="1025">
+      <smtps enable="false" starttls="false">
+         <!--
+         <protocols>
+           <protocol>TLSv1</protocol>
+           <protocol>TLSv1.1</protocol>
+           <protocol>TLSv1.2</protocol>
+         </protocols>
+         -->
+      </smtps>
+      <auth enable="false">
+        <user/>
+        <password/>
+      </auth>
+      <x-mailer>intra-mart MailSender ver 8.0</x-mailer>
+      <debug>false</debug>
+      <connection-timeout>60000</connection-timeout>
+      <timeout>60000</timeout>
+    </smtp-server>
+  </smtp>
+
+  <content-type>
+    <file extension=".txt" content-type="text/plain"/>
+    <file extension=".gif" content-type="image/gif"/>
+    <file extension=".jpg" content-type="image/jpeg"/>
+    <file extension=".png" content-type="image/png"/>
+  </content-type>
+
+  <listener>
+    <listener-class>jp.co.intra_mart.foundation.mail.javamail.listener.impl.HalfKanaTransrateListener</listener-class>
+    <listener-class>jp.co.intra_mart.foundation.mail.javamail.listener.impl.RewritingMailAddressListener</listener-class>
+  </listener>
+
+  <encode>
+    <charset>UTF-8</charset>
+    <mime-encoding>B</mime-encoding>
+    <content-transfer-encoding>base64</content-transfer-encoding>
+  </encode>
+
+</javamail-config>

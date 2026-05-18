@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://intra-mart.co.jp/system/solr/config/solr-config" xmlns:tns="http://intra-mart.co.jp/system/solr/config/solr-config" elementFormDefault="qualified">
+
+    <element name="solr-config">
+        <complexType>
+            <sequence>
+                <element name="group" type="tns:group-type" minOccurs="1" maxOccurs="unbounded" />
+            </sequence>
+        </complexType>
+    </element>
+
+    <complexType name="group-type">
+        <sequence minOccurs="1" maxOccurs="1">
+            <element name="searcher" type="tns:searcher-type" />
+            <element name="indexer" type="tns:indexer-type" />
+            <element name="extractor" type="tns:extractor-type" />
+        </sequence>
+        <attribute name="name" type="string" use="required" />
+    </complexType>
+
+    <complexType name="searcher-type">
+        <all>
+            <element name="method" minOccurs="0" maxOccurs="1" default="POST">
+                <simpleType>
+                    <restriction base="string">
+                        <enumeration value="POST" />
+                        <enumeration value="GET" />
+                    </restriction>
+                </simpleType>
+            </element>
+            <element name="distribution-policy" minOccurs="0" maxOccurs="1" default="FIRST">
+                <simpleType>
+                    <restriction base="string">
+                        <enumeration value="FIRST" />
+                        <enumeration value="ROUNDROBIN" />
+                        <enumeration value="RANDOM" />
+                    </restriction>
+                </simpleType>
+            </element>
+            <element name="servers" type="tns:servers-type" />
+        </all>
+    </complexType>
+
+    <complexType name="indexer-type">
+        <all>
+            <element name="distribution-policy" minOccurs="0" maxOccurs="1" default="IDHASH">
+                <simpleType>
+                    <restriction base="string">
+                        <enumeration value="IDHASH" />
+                        <enumeration value="ROUNDROBIN" />
+                        <enumeration value="RANDOM" />
+                    </restriction>
+                </simpleType>
+            </element>
+            <element name="servers" type="tns:servers-type" />
+        </all>
+    </complexType>
+
+    <complexType name="extractor-type">
+        <attribute name="ref" type="string" use="required" />
+    </complexType>
+
+    <complexType name="servers-type">
+        <sequence>
+            <element name="url" type="anyURI" minOccurs="1" maxOccurs="unbounded" />
+        </sequence>
+    </complexType>
+
+</schema>

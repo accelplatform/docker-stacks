@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<project default="make" basedir=".">
+	<property file="build.properties"/>
+
+	<property name="app.basedir" value="/app"/>
+
+	<path id="jackling.classpath" location="target/classes">
+		<fileset dir="${basedir}/lib">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	<taskdef name="juggling-war" classname="jp.co.intra_mart.juggling.ant.WarTask" classpathref="jackling.classpath" />
+
+	<target name="make">
+
+		<delete dir="${juggling.dest}" />
+		<delete dir="${juggling.dest.static}" />
+		<delete file="${juggling.war}" />
+		<delete dir="${juggling.static}" />
+
+		<juggling-war sample="${juggling.sample}" runtime="${juggling.runtime}" project="${juggling.project}" env="${juggling.env}" dest="${juggling.dest}" work="${juggling.work}" trial="false">
+			<repository name="base" path="${juggling.repository.base}" />
+			<repository name="app" path="${juggling.repository.app}" />
+		</juggling-war>
+
+		<echo message="Copying overwrite files to WEB-INF..." />
+		<exec executable="sh">
+			<arg value="-c"/>
+			<arg value="cp -rv ${app.basedir}/overwrite/* ${juggling.dest}/WEB-INF/"/>
+		</exec>
+
+		<war destfile="${juggling.war}" basedir="${juggling.dest}" />
+
+		<juggling-war type="static" sample="${juggling.sample}" runtime="${juggling.runtime}" project="${juggling.project}" env="${juggling.env}" dest="${juggling.dest.static}" work="${juggling.work}" trial="false">
+			<repository name="base" path="${juggling.repository.base}" />
+			<repository name="app" path="${juggling.repository.app}" />
+		</juggling-war>
+
+		<zip destfile="${juggling.static}" basedir="${juggling.dest.static}" />
+	</target>
+
+	<target name="clean">
+		<delete dir="${target}" />
+	</target>
+
+	<target name="clean-local-repository">
+		<delete dir="${juggling.work}" />
+	</target>
+</project>
