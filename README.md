@@ -41,7 +41,7 @@ Accel Platform Docker stacks は、初期設定の状態で下記バージョン
   git config --global https.proxy http://proxy:port
   ```
 - Docker Desktop  
-  環境に合わせて以下を適宜設定します
+  環境に合わせて以下を適宜設定します。  
   Docker Desktop UI の settings > Resources > Proxies で設定。
 
 ## 構成
@@ -120,6 +120,8 @@ docker-stacks/
 下記コマンドを実行することにより、コンテナイメージの作成が行われます。
 
 ```sh
+# カレントディレクトリをdocker-stacksにする
+cd docker-stacks
 # メイン（resin、httpd、postgresql等）
 docker compose build --no-cache
 # war作成＋静的ファイル配置
