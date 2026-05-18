@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+    targetNamespace="http://intra-mart.co.jp/system/service/client/config/network-agent-config"
+    xmlns:tns="http://intra-mart.co.jp/system/service/client/config/network-agent-config" 
+    xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" jaxb:version="2.0"
+    elementFormDefault="qualified">
+
+<annotation>
+  <appinfo>
+    <jaxb:schemaBindings>
+      <jaxb:package name="jp.co.intra_mart.system.service.client.config"/>
+    </jaxb:schemaBindings>
+  </appinfo>
+</annotation>
+
+<element name="network-agent-config">
+  <complexType>
+    <sequence>
+      <element name="id" type="string" />
+      <element name="bind-port" type="positiveInteger" />
+      <element name="port-range" type="nonNegativeInteger" />
+      <element name="preferIPv4Stack" type="boolean" />
+      <element name="max-threads" type="positiveInteger" minOccurs="0"/>
+      <element name="max-oob-threads" type="positiveInteger" minOccurs="0"/>
+      <choice>
+        <element name="TCP" type="tns:TCP"/>
+        <element name="UDP" type="tns:UDP"/>
+      </choice>
+    </sequence>
+  </complexType>
+</element>
+
+  <complexType name="TCP">
+    <sequence>
+      <element name="initial-hosts" type="tns:initial-host-type"/>
+    </sequence>
+  </complexType>
+
+  <complexType name="initial-host-type">
+    <sequence>
+      <element name="host" minOccurs="1" maxOccurs="unbounded">
+        <complexType>
+          <attribute name="address" type="string" use="required"></attribute>
+        </complexType>
+      </element>
+    </sequence>
+  </complexType>
+
+  <complexType name="UDP">
+    <all>
+      <element name="mcast-address" type="string"/>
+      <element name="mcast-port" type="positiveInteger"/>
+      <element name="initial-members" type="positiveInteger" minOccurs="0"/>
+    </all>
+  </complexType>
+
+</schema>

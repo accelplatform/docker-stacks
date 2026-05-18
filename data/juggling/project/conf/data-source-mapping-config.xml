@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data-source-mapping-config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://intra-mart.co.jp/system/database/config/data-source-mapping-config"
+    xsi:schemaLocation="http://intra-mart.co.jp/system/database/config/data-source-mapping-config ../schema/data-source-mapping-config.xsd ">
+  <system-data-source>
+    <resource-ref-name>java:comp/env/jdbc/default</resource-ref-name>
+    <!-- WebSphere
+    <resource-ref-name>jdbc/default</resource-ref-name>
+    -->
+  </system-data-source>
+  <tenant-data-source>
+    <tenant-id>default</tenant-id>
+    <resource-ref-name>java:comp/env/jdbc/default</resource-ref-name>
+    <!-- WebSphere
+    <resource-ref-name>jdbc/default</resource-ref-name>
+    -->
+  </tenant-data-source>
+</data-source-mapping-config>

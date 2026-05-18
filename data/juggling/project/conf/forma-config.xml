@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<forma-config xmlns="http://www.intra-mart.jp/forma-config"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.intra-mart.jp/forma/forma-config ../../schema/forma-config.xsd">
+  <item-setting>
+    <date-format>yyyy/MM/dd</date-format>
+    <date-format>yyyy/M/d</date-format>
+    <date-format>yyyy-MM-dd</date-format>
+    <date-format>yyyy-M-d</date-format>
+    <date-format>dd/MM/yyyy</date-format>
+    <date-format>MM/dd/yyyy</date-format>
+    <table-row-limit>50</table-row-limit>
+    <table-col-limit>30</table-col-limit>
+    <imw-stamp-list-col-limit>30</imw-stamp-list-col-limit>
+    <listbox-item-limit>30</listbox-item-limit>
+    <radio-item-limit>30</radio-item-limit>
+    <checkbox-item-limit>30</checkbox-item-limit>
+    <selectbox-item-limit>30</selectbox-item-limit>
+    <!-- セレクトボックス スクロール表示件数
+    <selectbox-item-display-limit>20</selectbox-item-display-limit>
+    -->
+    <exclude-itemselect>product_72_checkbox</exclude-itemselect>
+    <exclude-itemselect>product_72_listbox</exclude-itemselect>
+    <exclude-itemselect>product_72_radio</exclude-itemselect>
+    <exclude-itemselect>product_72_selectbox</exclude-itemselect>
+    <exclude-itemselect>product_72_userSelect</exclude-itemselect>
+    <exclude-itemselect>product_72_departmentSelect</exclude-itemselect>
+    <exclude-itemselect>product_72_departmentPostSelect</exclude-itemselect>
+    <exclude-itemselect>product_72_affiliationSelect</exclude-itemselect>
+    <exclude-itemselect>product_72_formaAutoNo</exclude-itemselect>
+    <exclude-itemselect>product_72_func</exclude-itemselect>
+    <exclude-itemselect>product_80_richtextbox</exclude-itemselect>
+    <richtextbox-use-imui-data-url>false</richtextbox-use-imui-data-url>
+    <ui-theme-mode>iap</ui-theme-mode>
+  </item-setting>
+  <toolkit-setting>
+    <define-item>
+      <item-path>forma/designer/types/product/72/textbox</item-path>
+      <item-path>forma/designer/types/product/72/textarea</item-path>
+      <item-path>forma/designer/types/product/72/number</item-path>
+      <item-path>forma/designer/types/product/72/func</item-path>
+      <item-path>forma/designer/types/product/72/calendar</item-path>
+      <item-path>forma/designer/types/product/72/terms</item-path>
+      <item-path>forma/designer/types/product/72/checkbox</item-path>
+      <item-path>forma/designer/types/product/72/radio</item-path>
+      <item-path>forma/designer/types/product/72/selectbox</item-path>
+      <item-path>forma/designer/types/product/72/listbox</item-path>
+      <item-path>forma/designer/types/product/72/hidden</item-path>
+      <item-path>forma/designer/types/product/72/itemSelect</item-path>
+      <item-path>forma/designer/types/product/72/label</item-path>
+      <item-path>forma/designer/types/product/72/script</item-path>
+      <item-path>forma/designer/types/product/72/image</item-path>
+      <item-path>forma/designer/types/product/72/shape</item-path>
+      <item-path>forma/designer/types/product/72/horizontalrule</item-path>
+      <item-path>forma/designer/types/product/72/verticalline</item-path>
+      <item-path>forma/designer/types/product/72/table</item-path>
+      <item-path>forma/designer/types/product/72/fileupload</item-path>
+      <item-path>forma/designer/types/product/72/userSelect</item-path>
+      <item-path>forma/designer/types/product/72/departmentSelect</item-path>
+      <item-path>forma/designer/types/product/72/departmentPostSelect</item-path>
+      <item-path>forma/designer/types/product/72/affiliationSelect</item-path>
+      <item-path>forma/designer/types/product/72/imwMatterData</item-path>
+      <item-path>forma/designer/types/product/72/imwMatterFile</item-path>
+      <item-path>forma/designer/types/product/72/imwMatterImage</item-path>
+      <item-path>forma/designer/types/product/72/imwMatterHistory</item-path>
+      <item-path>forma/designer/types/product/72/imwConfirmHistory</item-path>
+      <item-path>forma/designer/types/product/72/imwStampList</item-path>
+      <item-path>forma/designer/types/product/80/header</item-path>
+      <item-path>forma/designer/types/product/80/registButton</item-path>
+      <item-path>forma/designer/types/product/80/returnButton</item-path>
+      <item-path>forma/designer/types/product/80/nextButton</item-path>
+      <item-path>forma/designer/types/product/80/previousButton</item-path>
+      <item-path>forma/designer/types/product/80/tempButton</item-path>
+      <item-path>forma/designer/types/product/80/eventButton</item-path>
+      <item-path>forma/designer/types/product/72/formaAutoNo</item-path>
+      <item-path>forma/designer/types/product/extend/viewer</item-path>
+      <item-path>forma/designer/types/product/80/richtextbox</item-path>
+      <item-path>forma/designer/types/product/80/recycleButton</item-path>
+    </define-item>
+    <default-grouping>
+      <group>
+        <group-id>input</group-id>
+        <item-id>product_72_textbox</item-id>
+        <item-id>product_72_textarea</item-id>
+        <item-id>product_72_number</item-id>
+        <item-id>product_72_func</item-id>
+        <item-id>product_72_calendar</item-id>
+        <item-id>product_72_terms</item-id>
+        <item-id>product_72_itemSelect</item-id>
+        <item-id>product_72_table</item-id>
+        <item-id>product_72_checkbox</item-id>
+        <item-id>product_72_radio</item-id>
+        <item-id>product_72_selectbox</item-id>
+        <item-id>product_72_listbox</item-id>
+        <item-id>product_72_fileupload</item-id>
+        <item-id>product_80_richtextbox</item-id>
+      </group>
+      <group>
+        <group-id>button</group-id>
+        <item-id>product_80_registButton</item-id>
+        <item-id>product_80_nextButton</item-id>
+        <item-id>product_80_previousButton</item-id>
+        <item-id>product_80_returnButton</item-id>
+        <item-id>product_80_tempButton</item-id>
+        <item-id application-type="imw">product_80_recycleButton</item-id>
+      </group>
+      <group>
+        <group-id>master</group-id>
+        <item-id>product_72_userSelect</item-id>
+        <item-id>product_72_departmentSelect</item-id>
+        <item-id>product_72_departmentPostSelect</item-id>
+        <item-id>product_72_affiliationSelect</item-id>
+      </group>
+      <group application-type="imw">
+        <group-id>workflow</group-id>
+        <item-id>product_72_imwMatterData</item-id>
+        <item-id>product_72_imwMatterFile</item-id>
+        <item-id>product_72_imwMatterImage</item-id>
+        <item-id>product_72_imwMatterHistory</item-id>
+        <item-id>product_72_imwConfirmHistory</item-id>
+        <item-id>product_72_imwStampList</item-id>
+      </group>
+      <group>
+        <group-id>general</group-id>
+        <item-id>product_72_hidden</item-id>
+        <item-id>product_72_script</item-id>
+        <item-id>product_80_eventButton</item-id>
+        <item-id>product_72_formaAutoNo</item-id>
+        <item-id>product_extend_viewer</item-id>
+      </group>
+      <group>
+        <group-id>display</group-id>
+        <item-id>product_80_header</item-id>
+        <item-id>product_72_horizontalrule</item-id>
+        <item-id>product_72_verticalline</item-id>
+        <item-id>product_72_shape</item-id>
+        <item-id>product_72_image</item-id>
+        <item-id>product_72_label</item-id>
+      </group>
+    </default-grouping>
+    <page-path>forma/designer/form_designer_toolkit</page-path>
+  </toolkit-setting>
+  <!-- 一覧表示件数 関連設定（設定変更可能） -->
+  <listdisplay-setting>
+    <!-- ページ内表示件数 1ページ内に表示するデータ件数を指定します。 -->
+    <page_count>15</page_count>
+    <!-- 表示件数切り替え用の件数リストをカンマ区切りで指定します。 -->
+    <page_pattern>15,30,45,60</page_pattern>
+  </listdisplay-setting>
+  <!-- テーブル作成 関連設定（設定変更可能） -->
+  <table-setting>
+    <!--  データ型 文字列 -->
+    <data_type_string>varchar</data_type_string>
+    <!-- データ型 数値 -->
+    <data_type_number>decimal</data_type_number>
+    <!-- データ型 日付 -->
+    <data_type_date>date</data_type_date>
+    <!-- データ型 タイムスタンプ -->
+    <data_type_timestamp>timestamp</data_type_timestamp>
+    <!-- データ型 バイナリ -->
+    <data_type_binary>bytea</data_type_binary>
+    <!-- テーブル名最大文字数 -->
+    <table_name_max_length>30</table_name_max_length>
+    <!--  列名最大文字数 -->
+    <column_name_max_length>30</column_name_max_length>
+  </table-setting>
+  <!-- imw連携情報（設定変更可能） -->
+  <imw-setting>
+    <!-- アプリケーション種別がIM-Workflowの場合、メニュー設定タブを表示する場合true/非表示の場合false -->
+    <!-- true/falseを設定してください。 -->
+    <show_menu_tab>false</show_menu_tab>
+    <!-- アプリケーション種別がIM-Workflowの場合、一覧表示設定タブを表示する場合true/非表示の場合false -->
+    <!-- true/falseを設定してください。 -->
+    <show_list_item_disp_tab>false</show_list_item_disp_tab>
+    <!-- アプリケーション種別がIM-Workflowの場合、権限設定タブを表示する場合true/非表示の場合false -->
+    <!-- true/falseを設定してください。 -->
+    <show_auth_setting_tab>false</show_auth_setting_tab>
+  </imw-setting>
+  <basis-setting>
+    <!-- アイテムのラベル入力最大文字数 -->
+    <item_label_max>10000</item_label_max>
+    <!-- 画面アイテム「ラベル」の入力最大文字数 -->
+    <label_item_max>10000</label_item_max>
+    <!-- フィールド識別IDの入力最大文字数 -->
+    <input_id_max>20</input_id_max>
+  </basis-setting>
+  <!-- 画像アップロードで許可する拡張子を定義します。 -->
+  <image-upload-setting>
+    <acceptFileType>gif</acceptFileType>
+    <acceptFileType>jpeg</acceptFileType>
+    <acceptFileType>png</acceptFileType>
+  </image-upload-setting>
+  <!-- スマートフォン表示設定 -->
+  <smartphone-setting>
+    <!-- 明細テーブルの1ページに表示する行数 -->
+    <table_page_size>5</table_page_size>
+    <!-- グリッドテーブルの1ページに表示する行数 -->
+    <gridtable_page_size>5</gridtable_page_size>
+  </smartphone-setting>
+  <!-- ヘルプのURLを設定します -->
+  <help-setting>
+    <itemHelpUrl>http://www.intra-mart.jp/document/library/forma/public/forma_designer_help/item_help/common/item/</itemHelpUrl>
+    <designerHelpUrl>http://www.intra-mart.jp/document/library/forma/public/forma_designer_help/designer_help/forma.html</designerHelpUrl>
+  </help-setting>
+  <!-- フォント設定（設定変更可能） -->
+  <font-setting>
+    <fonts>
+      <font-name>ゴシック体</font-name>
+      <font-values>ＭＳ Ｐゴシック</font-values>
+      <font-values>平成角ゴシック</font-values>
+      <font-values>sans-serif</font-values>
+    </fonts>
+    <fonts>
+      <font-name>明朝体</font-name>
+      <font-values>ＭＳ Ｐ明朝</font-values>
+      <font-values>平成明朝</font-values>
+      <font-values>serif</font-values>
+    </fonts>
+    <fonts>
+      <font-name>Andale Mono</font-name>
+      <font-values>andale mono</font-values>
+      <font-values>times</font-values>
+    </fonts>
+    <fonts>
+      <font-name>Arial</font-name>
+      <font-values>arial</font-values>
+      <font-values>helvetica</font-values>
+      <font-values>sans-serif</font-values>
+    </fonts>
+    <fonts>
+      <font-name>Arial Black</font-name>
+      <font-values>arial black</font-values>
+      <font-values>avant garde</font-values>
+    </fonts>
+    <fonts>
+      <font-name>Book Antiqua</font-name>
+      <font-values>book antiqua</font-values>
+      <font-values>palatino</font-values>
+    </fonts>
+    <fonts>
+      <font-name>Comic Sans MS</font-name>
+      <font-values>comic sans ms</font-values>
+      <font-values>sans-serif</font-values>
+    </fonts>
+    <fonts>
+      <font-name>Courier New</font-name>
+      <font-values>courier new</font-values>
+      <font-values>courier</font-values>
+    </fonts>
+    <fonts>
+      <font-name>Georgia</font-name>
+      <font-values>georgia</font-values>
+      <font-values>palatino</font-values>
+    </fonts>
+    <fonts>
+      <font-name>Helvetica</font-name>
+      <font-values>helvetica</font-values>
+    </fonts>
+    <fonts>
+      <font-name>Impact</font-name>
+      <font-values>impact</font-values>
+      <font-values>chicago</font-values>
+    </fonts>
+    <fonts>
+      <font-name>Tahoma</font-name>
+      <font-values>tahoma</font-values>
+      <font-values>arial</font-values>
+      <font-values>helvetica</font-values>
+      <font-values>sans-serif</font-values>
+    </fonts>
+    <fonts>
+      <font-name>Times New Roman</font-name>
+      <font-values>times new roman</font-values>
+      <font-values>times</font-values>
+    </fonts>
+    <fonts>
+      <font-name>Trebuchet MS</font-name>
+      <font-values>trebuchet ms</font-values>
+      <font-values>geneva</font-values>
+    </fonts>
+    <fonts>
+      <font-name>Verdana</font-name>
+      <font-values>verdana</font-values>
+      <font-values>geneva</font-values>
+    </fonts>
+  </font-setting>
+  <auto-no-setting>
+    <retry-max>10</retry-max>
+  </auto-no-setting>
+  <escape-full-width-percent-and-underscore-flag>false</escape-full-width-percent-and-underscore-flag>
+  <transaction-file-location>
+    <fileupload>db</fileupload>
+  </transaction-file-location>
+  <designer-setting>
+    <undo-memory-max-step>100</undo-memory-max-step>
+  </designer-setting>
+</forma-config>

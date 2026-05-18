@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" 
+    targetNamespace="http://intra-mart.co.jp/system/database/config/data-source-mapping-config" 
+    xmlns:tns="http://intra-mart.co.jp/system/database/config/data-source-mapping-config" 
+    xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" jaxb:version="2.0"
+    elementFormDefault="qualified">
+
+  <annotation>
+    <appinfo>
+      <jaxb:schemaBindings>
+        <jaxb:package name="jp.co.intra_mart.system.database.config"/>
+      </jaxb:schemaBindings>
+    </appinfo>
+    <documentation>データソースマッピング設定スキーマ</documentation>
+  </annotation>
+
+  <element name="data-source-mapping-config">
+    <complexType>
+      <annotation>
+        <documentation>データソースマッピング設定ルートノード</documentation>
+      </annotation>
+
+      <sequence>
+        <element name="system-data-source" type="tns:system-data-source-type">
+          <annotation>
+            <documentation>テナント管理データベース設定情報</documentation>
+          </annotation>
+        </element>
+        <element name="shared-data-source" type="tns:shared-data-source-type" minOccurs="0" maxOccurs="unbounded">
+          <annotation>
+            <documentation>シェアードデータベース設定情報</documentation>
+          </annotation>
+        </element>
+        <element name="tenant-data-source" type="tns:tenant-data-source-type" minOccurs="0" maxOccurs="unbounded">
+          <annotation>
+            <documentation>テナントデータベース設定情報</documentation>
+          </annotation>
+        </element>
+      </sequence>
+    </complexType>
+  </element>
+
+  <complexType name="system-data-source-type">
+    <annotation>
+      <documentation>テナント管理データベースの設定</documentation>
+    </annotation>
+    
+    <sequence>
+      <element name="resource-ref-name" type="string">
+        <annotation>
+          <documentation>データソースのリソース参照名</documentation>
+        </annotation>
+      </element>
+      <element name="database-name" type="string" minOccurs="0">
+        <annotation>
+          <documentation>接続データベースの種別</documentation>
+        </annotation>
+      </element>
+    </sequence>
+  </complexType>
+
+  <complexType name="shared-data-source-type">
+    <annotation>
+      <documentation>システムで利用するデータベースの設定</documentation>
+    </annotation>
+
+    <sequence>
+      <element name="connect-id" type="string">
+        <annotation>
+          <documentation>シェアードデータベースの接続ID</documentation>
+        </annotation>
+      </element>
+      <element name="resource-ref-name" type="string">
+        <annotation>
+          <documentation>データソースのリソース参照名</documentation>
+        </annotation>
+      </element>
+      <element name="database-name" type="string" minOccurs="0">
+        <annotation>
+          <documentation>接続データベースの種別</documentation>
+        </annotation>
+      </element>
+    </sequence>
+  </complexType>
+
+  <complexType name="tenant-data-source-type">
+    <annotation>
+      <documentation>テナントで利用するデータベースの設定</documentation>
+    </annotation>
+
+    <sequence>
+      <element name="tenant-id" type="string">
+        <annotation>
+          <documentation>このデータベース設定を利用するテナントのテナントID</documentation>
+        </annotation>
+      </element>
+      <element name="resource-ref-name" type="string">
+        <annotation>
+          <documentation>データソースのリソース参照名</documentation>
+        </annotation>
+      </element>
+      <element name="database-name" type="string" minOccurs="0">
+        <annotation>
+          <documentation>接続データベースの種別</documentation>
+        </annotation>
+      </element>
+    </sequence>
+  </complexType>
+</schema>

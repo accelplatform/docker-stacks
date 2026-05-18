@@ -1,0 +1,132 @@
+services:
+  httpd:
+    image: $DOCKER_IMAGE_REPOSITORY/${DOCKER_IMAGE_TAG_PREFIX}httpd:2.4
+    build:
+      context: ./httpd
+    environment:
+      TZ: $TZ
+    ports:
+      - 80:80
+    volumes:
+      - ./data/juggling/public:/usr/local/apache2/htdocs/imart
+      - ./data/httpd/log:/var/log/httpd
+  resin:
+    image: $DOCKER_IMAGE_REPOSITORY/${DOCKER_IMAGE_TAG_PREFIX}resin:4.0.67
+    build:
+      context: ./resin
+    environment:
+      TZ: $TZ
+      BASE_URL: $BASE_URL
+    ports:
+      - 8080:8080
+    #   - 8443:8443
+    volumes:
+      - ./resin/overwrite/conf/resin.properties:/opt/resin/conf/resin.properties
+      - ./data/resin/log/imart:/data/imart
+      - ./data/resin/log/resin:/opt/resin/log
+      - ./data/resin/storage:/data/storage
+      - ./data/juggling/war:/opt/resin/webapps/imart
+    depends_on:
+      oracle:
+        condition: service_healthy
+      cassandra:
+        condition: service_started
+      solr:
+        condition: service_started
+  solr:
+    image: $DOCKER_IMAGE_REPOSITORY/${DOCKER_IMAGE_TAG_PREFIX}solr:9.6.0-1
+    build:
+      context: ./solr
+    environment:
+      TZ: $TZ
+      SOLR_JETTY_HOST: 0.0.0.0
+    restart: always
+    volumes:
+      - ./data/solr/default:/opt/solr/server/solr/default/data
+      - ./data/solr/default_vector:/opt/solr/server/solr/default_vector/data
+      - ./data/solr/logs:/opt/solr/server/logs
+    ports:
+      - 8983:8983
+  cassandra:
+    image: $DOCKER_IMAGE_REPOSITORY/${DOCKER_IMAGE_TAG_PREFIX}cassandra:1.1.12
+    build:
+      context: ./cassandra
+    environment:
+      TZ: $TZ
+    restart: always
+    volumes:
+      - ./data/cassandra:/var/lib/cassandra
+      - ./data/cassandra/log:/var/log/cassandra
+    ports:
+      - 9160:9160
+  oracle:
+    image: $DOCKER_IMAGE_REPOSITORY/${DOCKER_IMAGE_TAG_PREFIX}oracle:23.26.1.0-free
+    build:
+      context: ./oracle
+    hostname: oracle
+    shm_size: "2gb"
+    volumes:
+      - ./data/oracle/data:/opt/oracle/oradata
+      - ./data/oracle/log:/opt/oracle/diag
+    environment:
+      TZ: $TZ
+      ORACLE_PWD: Password
+      ORACLE_APP_USER: imart
+      ORACLE_APP_USER_PASSWORD: imart
+    ports:
+      - 1521:1521
+  mailpit:
+    image: axllent/mailpit:v1.27
+    restart: always
+    ports:
+      # - 1025:1025
+      - 8025:8025
+    environment:
+      TZ: $TZ
+      MP_MAX_MESSAGES: 5000
+      MP_DATABASE: /data/mailpit.db
+      MP_SMTP_AUTH_ACCEPT_ANY: 1
+      MP_SMTP_AUTH_ALLOW_INSECURE: 1
+    volumes:
+      - ./data/mailpit:/data
+  juggling-build-war:
+    image: $DOCKER_IMAGE_REPOSITORY/${DOCKER_IMAGE_TAG_PREFIX}juggling-build-war:1.0.7
+    build:
+      context: ./juggling-build-war
+    environment:
+      - TZ=$TZ
+    volumes:
+      - ./data/juggling:/data
+    profiles:
+      - prepare
+  extract-imm:
+    image: $DOCKER_IMAGE_REPOSITORY/${DOCKER_IMAGE_TAG_PREFIX}extract-imm:1.0.0
+    build:
+      context: ./imm
+    environment:
+      - TZ=$TZ
+    volumes:
+      - ./data/juggling:/data
+    profiles:
+      - prepare
+  accelstudio-testing-agent:
+    image: $DOCKER_IMAGE_REPOSITORY/${DOCKER_IMAGE_TAG_PREFIX}accelstudio-testing-agent:8.0.2
+    build:
+      context: ./accelstudio-testing-agent
+      args:
+        PLAYWRIGHT_VERSION: $ACCELSTUDIO_TESTING_AGENT_PLAYWRIGHT_VERSION
+        LANG: $LANG
+    ports:
+      - 8188:8188
+    environment:
+      - TZ=$TZ
+      - LANG=$LANG
+      - LC_ALL=$LC_ALL
+      - LANGUAGE=$LANGUAGE
+      - PLAYWRIGHT_VERSION=$ACCELSTUDIO_TESTING_AGENT_PLAYWRIGHT_VERSION
+      - ACCELPLATFORM_BASE_URL=$ACCELSTUDIO_TESTING_AGENT_ACCELPLATFORM_BASE_URL
+      - ACCELPLATFORM_ACCESS_TOKEN=$ACCELSTUDIO_TESTING_AGENT_ACCELPLATFORM_ACCESS_TOKEN
+    volumes:
+      - ./data/accelstudio-testing-agent/logs:/usr/src/app/logs
+    profiles:
+      - test

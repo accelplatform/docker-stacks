@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<network-agent-config
+    xmlns="http://intra-mart.co.jp/system/service/client/config/network-agent-config" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:schemaLocation="http://intra-mart.co.jp/system/service/client/config/network-agent-config ../schema/network-agent-config.xsd">
+
+  <id>prototype</id>
+  <bind-port>5200</bind-port>
+  <port-range>2</port-range>
+  <preferIPv4Stack>true</preferIPv4Stack>
+  
+  <TCP>
+    <initial-hosts>
+      <host address="resin"/>
+    </initial-hosts>
+  </TCP>
+
+</network-agent-config>
