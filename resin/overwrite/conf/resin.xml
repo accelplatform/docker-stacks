@@ -81,7 +81,7 @@
     jdk.tls.rejectClientInitiatedRenegotiation="true"
     sun.security.ssl.allowUnsafeRenegotiation="false"
     sun.security.ssl.allowLegacyHelloMessages="false"
-    http.nonProxyHosts="localhost|127.0.0.1|httpd|resin|postgresql|cassandra|solr|mailpit|accelstudio-testing-agent|juggling-build-war|extract-imm"
+    http.nonProxyHosts="localhost|127.0.0.1|httpd|oracle|postgresql|cassandra|solr|mailpit|accelstudio-testing-agent|juggling-build-war|extract-imm"
     />
   
   <!--
