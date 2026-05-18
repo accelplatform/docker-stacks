@@ -2,8 +2,8 @@
 
 ## 概要
 
-Docker を利用した Accel Platform を動作させるためのスタンドアロン構成を提供します。
-ビルドを行い war ファイルや静的ファイルを生成する事ができます。JDK のインストール等も不要です。
+Docker を利用した Accel Platform を動作させるためのスタンドアロン構成を提供します。  
+ビルドを行い war ファイルや静的ファイルを生成する事ができます。JDK のインストール等も不要です。  
 `mailpit`を組み込んでいる為、メール送信の確認が容易に行えます。
 
 ## 構成とバージョン
@@ -30,7 +30,7 @@ Accel Platform Docker stacks は、初期設定の状態で下記バージョン
 
 ### Tips
 
-プロキシ環境に構築する場合は、Git、Docker Desktopにプロキシ設定が必要となるケースもあります。
+プロキシ環境に構築する場合は、Git、Docker Desktopにプロキシ設定が必要となるケースもあります。  
 `git clone` や `docker compose build` 、 `docker compose up` コマンドで失敗する場合はプロキシ設定をご確認ください。
 
 - Git  
@@ -200,7 +200,7 @@ statusがup状態であればコンテナは起動しています。コンテナ
 以下のコマンドを実行することにより、メインの各種サービスが停止します。
 
 ```sh
-# コンテナの起動
+# コンテナの停止
 docker compose down
 ```
 
@@ -325,7 +325,7 @@ docker compose down accelstudio-testing-agent
 
 #### バージョンによるエラー
 
-テスト実行時に以下のようなログメッセージのエラーが出る場合は、`.env`ファイルの`ACCELSTUDIO_TESTING_AGENT_PLAYWRIGHT_VERSION`のバージョンをに更新してください。（下記ログの例なら1.60.0に更新）
+テスト実行時に以下のようなログメッセージのエラーが出る場合は、`.env`ファイルの`ACCELSTUDIO_TESTING_AGENT_PLAYWRIGHT_VERSION`のバージョンを更新してください。（下記ログの例なら1.60.0に更新）
 
 data/accelstudio-testing-agent/logs/accel_studio_testing_agent.log
 
@@ -445,7 +445,7 @@ docker compose down
 # 必要に応じてテスト実行エージェントも停止する
 # docker compose down accelstudio-testing-agent
 # データの削除（消したい永続化データのディレクトリを指定）　
-rm -rf data/cassandra data/httpd data/mailpit data/postgresql data/resin data/solr data/accelstudio-testing-agent
+Remove-Item -Recurse -Force data/cassandra, data/httpd, data/mailpit, data/postgresql, data/resin, data/solr, data/accelstudio-testing-agent
 # コンテナの起動
 docker compose up -d
 ```
@@ -454,7 +454,7 @@ docker compose up -d
 
 ```sh
 # プロジェクト以外のjuggling成果物を初期化したい場合
-rm -rf data/juggling/public data/juggling/repository data/juggling/war data/juggling/imart.war data/juggling/imart.zip
+Remove-Item -Recurse -Force data/juggling/public, data/juggling/repository, data/juggling/war, data/juggling/imart.war, data/juggling/imart.zip
 ```
 
 ### 部分的に資材を追加する場合
