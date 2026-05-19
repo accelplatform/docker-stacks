@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="https://www.intra-mart.jp/accel-studio-testing-config" xmlns:tns="https://www.intra-mart.jp/accel-studio-testing-config" elementFormDefault="qualified" xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" jaxb:version="2.0">
+
+    <simpleType name="limitInt">
+        <restriction base="int">
+            <minInclusive value="0" />
+        </restriction>
+    </simpleType>
+
+    <simpleType name="nonEmptyString">
+        <restriction base="string">
+            <pattern value=".+" />
+        </restriction>
+    </simpleType>
+
+    <complexType name="retry">
+        <sequence>
+            <element name="max-count" type="tns:limitInt" default="3" minOccurs="0"></element>
+            <element name="wait-seconds" type="tns:limitInt" default="10" minOccurs="0"></element>
+        </sequence>
+    </complexType>
+
+    <complexType name="agent">
+        <sequence>
+            <element name="timeout-seconds" type="tns:limitInt" default="1800" minOccurs="0"></element>
+            <element name="retry" type="tns:retry" minOccurs="0"></element>
+        </sequence>
+        <attribute name="base-url" type="tns:nonEmptyString" use="required"></attribute>
+    </complexType>
+
+    <complexType name="definition">
+        <sequence>
+            <element name="resource-size-limit" type="tns:limitInt" default="1" minOccurs="0"></element>
+            <element name="resource-total-size-limit" type="tns:limitInt" default="100" minOccurs="0"></element>
+        </sequence>
+    </complexType>
+
+    <element name="accel-studio-testing-config">
+        <complexType>
+            <sequence>
+                <element name="testing-enabled" type="boolean" default="false" minOccurs="0"></element>
+                <element name="agent" type="tns:agent" minOccurs="0"></element>
+                <element name="definition" type="tns:definition" minOccurs="0"></element>
+            </sequence>
+        </complexType>
+    </element>
+
+    <annotation>
+        <appinfo>
+            <jaxb:schemaBindings>
+                <jaxb:package name="jp.co.intra_mart.foundation.accel_studio_testing.config" />
+            </jaxb:schemaBindings>
+        </appinfo>
+    </annotation>
+
+</schema>

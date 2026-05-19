@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema targetNamespace="http://www.intra-mart.jp/forma-config"
+  elementFormDefault="qualified" xmlns="http://www.w3.org/2001/XMLSchema"
+  xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+  jaxb:version="2.0"
+  xmlns:forma="http://www.intra-mart.jp/forma-config" >
+
+  <annotation>
+    <appinfo>
+      <jaxb:schemaBindings>
+        <jaxb:package name="jp.co.intra_mart.system.forma.config" />
+      </jaxb:schemaBindings>
+    </appinfo>
+  </annotation>
+
+  <element name="forma-config">
+    <complexType>
+      <sequence>
+        <element name="item-setting" type="forma:itemSettingType" minOccurs="1" />
+        <element name="toolkit-setting" type="forma:toolkitSettingType" minOccurs="1" maxOccurs="1" />
+        <element name="listdisplay-setting" type="forma:listdisplaySettingType" minOccurs="1" maxOccurs="1" />
+        <element name="table-setting" type="forma:tableSettingType" minOccurs="1" maxOccurs="1" />
+        <element name="imw-setting" type="forma:imwSettingType" minOccurs="1" maxOccurs="1" />
+        <element name="basis-setting" type="forma:basisSettingType" minOccurs="1" maxOccurs="1" />
+        <element name="image-upload-setting" type="forma:imageUploadSettingType" minOccurs="1" maxOccurs="1" />
+        <element name="smartphone-setting" type="forma:smartphoneSetting" minOccurs="0" maxOccurs="1" />
+        <element name="help-setting" type="forma:helpSettingType" minOccurs="1" maxOccurs="1" />
+        <element name="font-setting" type="forma:fontSettingType" minOccurs="1" maxOccurs="1" />
+        <element name="auto-no-setting" type="forma:autoNoSettingType" minOccurs="0" maxOccurs="1" />
+        <element name="escape-full-width-percent-and-underscore-flag" type="boolean" minOccurs="1" maxOccurs="1" />
+        <element name="external-indicator-flag" type="boolean" minOccurs="0" maxOccurs="1" />
+        <element name="external-linkage-db-query-max-rows" type="int" minOccurs="0" maxOccurs="1" />
+        <element name="transaction-file-location" type="forma:transactionFileLocationType" minOccurs="0" maxOccurs="1" />
+        <element name="designer-setting" type="forma:designerSettingType" minOccurs="0" maxOccurs="1" />
+      </sequence>
+    </complexType>
+  </element>
+
+  <complexType name="itemSettingType">
+    <sequence>
+      <element name="date-format" type="string" minOccurs="1" maxOccurs="unbounded" />
+      <element name="table-row-limit" type="int" minOccurs="1" maxOccurs="1" />
+      <element name="table-col-limit" type="int" minOccurs="1" maxOccurs="1" />
+      <element name="imw-stamp-list-col-limit" type="int" minOccurs="1" maxOccurs="1" />
+      <element name="listbox-item-limit" type="int" minOccurs="1" maxOccurs="1" />
+      <element name="radio-item-limit" type="int" minOccurs="1" maxOccurs="1" />
+      <element name="checkbox-item-limit" type="int" minOccurs="1" maxOccurs="1" />
+      <element name="selectbox-item-limit" type="int" minOccurs="1" maxOccurs="1" />
+      <element name="selectbox-item-display-limit" type="int" minOccurs="0" maxOccurs="1" />
+      <element name="exclude-itemselect" type="string" minOccurs="1" maxOccurs="unbounded" />
+      <element name="richtextbox-use-imui-data-url" type="boolean" minOccurs="0" maxOccurs="1" />
+      <element name="ui-theme-mode" type="string" minOccurs="0" maxOccurs="1" />
+      <element name="spreadsheet-item-filelength-limit" type="int" minOccurs="0" maxOccurs="1" />
+      <element name="spreadsheet-item-tablecolumn-limit" type="int" minOccurs="0" maxOccurs="1" />
+    </sequence>
+  </complexType>
+
+  <complexType name="toolkitSettingType">
+    <sequence>
+      <element name="define-item" type="forma:defineItemType" minOccurs="0" maxOccurs="1" />
+      <element name="default-grouping" type="forma:defaultGroupingType" minOccurs="0" maxOccurs="1" />
+      <element name="grouping" type="forma:groupingType" minOccurs="0" maxOccurs="unbounded" />
+      <element name="page-path" type="string" minOccurs="0" maxOccurs="1" />
+      <element name="css-path" type="string" minOccurs="0" maxOccurs="unbounded" />
+    </sequence>
+  </complexType>
+
+  <complexType name="defineItemType" >
+    <sequence>
+      <element name="item-path" type="string" minOccurs="0" maxOccurs="unbounded" />
+    </sequence>
+  </complexType>
+
+  <complexType name="defaultGroupingType" >
+    <sequence>
+      <element name="group" type="forma:groupType" minOccurs="0" maxOccurs="unbounded" />
+      <element name="page-path" type="string" minOccurs="0" maxOccurs="1" />
+    </sequence>
+  </complexType>
+
+  <complexType name="groupingType" >
+    <sequence>
+      <element name="login-group-id" type="string" minOccurs="1" maxOccurs="1" />
+      <element name="group" type="forma:groupType" minOccurs="0" maxOccurs="unbounded" />
+      <element name="page-path" type="string" minOccurs="0" maxOccurs="1" />
+    </sequence>
+  </complexType>
+
+  <complexType name="groupType">
+    <sequence>
+      <element name="group-id" type="string" minOccurs="1" maxOccurs="1" />
+      <element name="item-id" minOccurs="0" maxOccurs="unbounded" type="forma:item-id" />
+    </sequence>
+    <attribute name="application-type" type="string" />
+  </complexType>
+
+  <complexType name="item-id">
+    <simpleContent>
+      <extension base="string">
+        <attribute name="application-type" type="string" use="optional" />
+      </extension>
+    </simpleContent>
+  </complexType>
+
+  <complexType name="fontType" >
+    <sequence>
+      <element name="font-name" type="string" minOccurs="1" maxOccurs="1" />
+      <element name="font-values" type="string" minOccurs="1" maxOccurs="unbounded" />
+    </sequence>
+  </complexType>
+
+  <complexType name="listdisplaySettingType">
+    <sequence>
+      <element name="page_count" type="int" minOccurs="1" maxOccurs="1" />
+      <element name="page_pattern" type="string" minOccurs="1" maxOccurs="1" />
+    </sequence>
+  </complexType>
+
+  <complexType name="tableSettingType">
+    <sequence>
+      <element name="data_type_string" type="string" minOccurs="1" maxOccurs="1" />
+      <element name="data_type_number" type="string" minOccurs="1" maxOccurs="1" />
+      <element name="data_type_date" type="string" minOccurs="1" maxOccurs="1" />
+      <element name="data_type_timestamp" type="string" minOccurs="1" maxOccurs="1" />
+      <element name="data_type_binary" type="string" minOccurs="0" maxOccurs="1" />
+      <element name="table_name_max_length" type="int" minOccurs="1" maxOccurs="1" />
+      <element name="column_name_max_length" type="int" minOccurs="1" maxOccurs="1" />
+    </sequence>
+  </complexType>
+
+  <complexType name="imwSettingType">
+    <sequence>
+      <element name="show_menu_tab" type="boolean" minOccurs="1" maxOccurs="1" />
+      <element name="show_list_item_disp_tab" type="boolean" minOccurs="1" maxOccurs="1" />
+      <element name="show_auth_setting_tab" type="boolean" minOccurs="1" maxOccurs="1" />
+      <element name="show-post-history" type="boolean" minOccurs="0" maxOccurs="1" />
+    </sequence>
+  </complexType>
+
+  <complexType name="basisSettingType">
+    <sequence>
+      <element name="item_label_max" type="int" minOccurs="1" maxOccurs="1" />
+      <element name="label_item_max" type="int" minOccurs="1" maxOccurs="1" />
+      <element name="input_id_max" type="int" minOccurs="0" maxOccurs="1" />
+    </sequence>
+  </complexType>
+
+  <complexType name="imageUploadSettingType">
+    <sequence>
+      <element name="acceptFileType" type="string" minOccurs="1" maxOccurs="unbounded" />
+    </sequence>
+  </complexType>
+
+  <complexType name="itemType">
+    <sequence>
+      <element name="id" type="string" minOccurs="1" maxOccurs="1" />
+      <element name="url" minOccurs="0" maxOccurs="unbounded" type="forma:url" />
+      <element name="path" minOccurs="0" maxOccurs="unbounded" type="forma:path" />
+    </sequence>
+  </complexType>
+  
+  <complexType name="url">
+    <simpleContent>
+      <extension base="string">
+        <attribute name="application-type" type="string" use="optional" />
+      </extension>
+    </simpleContent>
+  </complexType>
+  
+  <complexType name="path">
+    <simpleContent>
+      <extension base="string">
+        <attribute name="application-type" type="string" use="optional" />
+      </extension>
+    </simpleContent>
+  </complexType>
+
+  <complexType name="helpSettingType">
+    <sequence>
+      <element name="itemHelpUrl" type="string" minOccurs="1" maxOccurs="1" />
+      <element name="designerHelpUrl" type="string" minOccurs="1" maxOccurs="1" />
+      <element name="itemType" type="forma:itemType" minOccurs="0" maxOccurs="unbounded" />
+    </sequence>
+  </complexType>
+
+  <complexType name="fontSettingType">
+    <sequence>
+      <element name="fonts" type="forma:fontType" minOccurs="1" maxOccurs="unbounded" />
+    </sequence>
+  </complexType>
+
+  <complexType name="autoNoSettingType">
+    <sequence>
+      <element name="retry-max" type="int" minOccurs="1" maxOccurs="1" />
+    </sequence>
+  </complexType>
+
+  <complexType name="smartphoneSetting">
+    <sequence>
+      <element name="table_page_size" type="int" minOccurs="0" maxOccurs="1" />
+      <element name="gridtable_page_size" type="int" minOccurs="0" maxOccurs="1" />
+    </sequence>
+  </complexType>
+  
+  <complexType name="transactionFileLocationType">
+    <sequence>
+      <element name="fileupload" type="string" minOccurs="0" maxOccurs="1" />
+    </sequence>
+  </complexType>
+
+  <complexType name="designerSettingType">
+    <sequence>
+      <element name="undo-memory-max-step" type="int" minOccurs="0" maxOccurs="1" />
+    </sequence>
+  </complexType>
+
+  <group name="NewGroupDefinition">
+    <sequence></sequence>
+  </group>
+</schema>

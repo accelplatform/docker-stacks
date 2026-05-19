@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<accel-studio-testing-config xmlns="https://www.intra-mart.jp/accel-studio-testing-config"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="https://www.intra-mart.jp/accel-studio-testing-config accel-studio-testing-config.xsd"
+>
+
+  <!--
+      テスト機能を利用する場合は true に変更してください。
+      If you want to use the testing function, change it to true.
+      使用测试功能时请改为 true 。
+  -->
+  <testing-enabled>true</testing-enabled>
+
+  <agent base-url="http://accelstudio-testing-agent:8188/accel-studio-testing-agent">
+    <timeout-seconds>1800</timeout-seconds>
+    <retry>
+      <max-count>3</max-count>
+      <wait-seconds>10</wait-seconds>
+    </retry>
+  </agent>
+
+  <definition>
+    <resource-size-limit>1024</resource-size-limit>
+    <resource-total-size-limit>102400</resource-total-size-limit>
+  </definition>
+
+</accel-studio-testing-config>

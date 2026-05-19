@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cassandra-config xmlns="http://www.intra-mart.jp/imbox/cassandra-config"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://www.intra-mart.jp/imbox/cassandra-config ../schema/cassandra-config.xsd ">
+
+	<cluster-name>Test Cluster</cluster-name>
+	<replication-factor>1</replication-factor>
+	<keyspace>default</keyspace>
+	<authentication enabled="false">
+		<username>admin</username>
+		<password>admin_pwd</password>
+	</authentication>
+	<hosts>
+		<host>cassandra:9160</host>
+	</hosts>
+</cassandra-config>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<storage-config xmlns="http://jp/co/intra-mart/foundation/service/client/file/config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jp/co/intra-mart/foundation/service/client/file/config ../schema/storage-config.xsd ">
+  <charset>UTF-8</charset>
+  <class-name>jp.co.intra_mart.system.service.client.file.ExternalStorageLocalFileImpl</class-name>
+  <unable-charactors>
+    <unable-charactor>\</unable-charactor>
+    <unable-charactor>:</unable-charactor>
+    <unable-charactor>*</unable-charactor>
+    <unable-charactor>?</unable-charactor>
+    <unable-charactor>&quot;</unable-charactor>
+    <unable-charactor>&lt;</unable-charactor>
+    <unable-charactor>&gt;</unable-charactor>
+    <unable-charactor>|</unable-charactor>
+  </unable-charactors>
+  <storage-info>
+    <root-path-name>/data/storage</root-path-name>
+    <system-directory-name>system</system-directory-name>
+    <public-directory-name>public</public-directory-name>
+    <group-directory-name>groups</group-directory-name>
+    <configuration-directory-name>conf</configuration-directory-name>
+    <conpatible-directory-name>public</conpatible-directory-name>
+    <storage-directory-name>storage</storage-directory-name>
+    <temporary-directory-name>temp</temporary-directory-name>
+  </storage-info>
+  <synchronize-info>
+    <synchronize-key>im_system_storage_synchronize_key</synchronize-key>
+  </synchronize-info>
+</storage-config>
