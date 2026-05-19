@@ -1,0 +1,10 @@
+{
+  "browser": {
+    "launchOptions": {
+      "headless": true,
+      "args": [
+        "--no-sandbox"
+      ]
+    }
+  }
+}

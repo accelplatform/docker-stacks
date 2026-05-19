@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+    targetNamespace="http://intra-mart.co.jp/system/mail/javamail/config/javamail-config"
+    xmlns:tns="http://intra-mart.co.jp/system/mail/javamail/config/javamail-config"
+    xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" jaxb:version="2.0"
+    elementFormDefault="qualified">
+
+  <annotation>
+    <appinfo>
+      <jaxb:schemaBindings>
+        <jaxb:package name="jp.co.intra_mart.system.mail.javamail.config"/>
+      </jaxb:schemaBindings>
+    </appinfo>
+  </annotation>
+
+  <element name="javamail-config">
+    <complexType>
+      <sequence>
+        <element name="smtp" type="tns:smtp-config" minOccurs="0"/>
+        <element name="content-type" type="tns:content-type-config" minOccurs="0"/>
+        <element name="listener" type="tns:listener-config" minOccurs="0"/>
+        <element name="encode" type="tns:encode-config" minOccurs="0" maxOccurs="unbounded"/>
+        <element name="mail-headers" type="tns:mail-headers-config" minOccurs="0" />
+      </sequence>
+    </complexType>
+  </element>
+
+  <complexType name="smtp-config">
+    <sequence>
+      <element name="smtp-server" type="tns:smtp-server-config" maxOccurs="unbounded"/>
+    </sequence>
+  </complexType>
+
+  <complexType name="smtp-server-config">
+    <sequence>
+      <element name="smtps" type="tns:smtps-type" minOccurs="0" maxOccurs="1"/>
+      <element name="auth" type="tns:auth-type"/>
+      <element name="x-mailer" type="string"/>
+      <element name="debug" type="boolean"/>
+      <element name="connection-timeout" type="int"/>
+      <element name="timeout" type="int"/>
+      <element name="session-properties" type="tns:session-properties-config" minOccurs="0" maxOccurs="1"/>
+    </sequence>
+    <attribute name="id" type="string" use="required"/>
+    <attribute name="host" type="string" use="required"/>
+    <attribute name="port" type="int" use="required"/>
+  </complexType>
+
+  <complexType name="smtps-type">
+    <sequence>
+      <element name="protocols" type="tns:protocols-config" minOccurs="0" maxOccurs="1"/>
+    </sequence>
+    <attribute name="enable" type="boolean" default="false"/>
+    <attribute name="starttls" type="boolean" default="false"/>
+  </complexType>
+
+  <complexType name="auth-type">
+    <sequence>
+      <element name="user" type="string" minOccurs="0"/>
+      <element name="password" type="string" minOccurs="0"/>
+      <element name="system-oauth-provider-id" type="string" minOccurs="0"/>
+    </sequence>
+    <attribute name="enable" type="boolean" default="false"/>
+  </complexType>
+
+  <complexType name="content-type-config">
+    <sequence>
+      <element name="file" type="tns:file-config" maxOccurs="unbounded"/>
+    </sequence>
+  </complexType>
+
+  <complexType name="file-config">
+    <attribute name="extension" type="string" use="required"/>
+    <attribute name="content-type" type="string" use="required"/>
+  </complexType>
+
+  <complexType name="listener-config">
+    <sequence>
+      <element name="listener-class" type="string" maxOccurs="unbounded"/>
+    </sequence>
+  </complexType>
+
+  <complexType name="encode-config">
+    <sequence>
+      <element name="charset" type="string"/>
+      <element name="mime-encoding" type="string"/>
+      <element name="content-transfer-encoding" type="string"/>
+    </sequence>
+    <attribute name="locale" type="string" use="optional"/>
+  </complexType>
+
+
+  <complexType name="mail-headers-config">
+    <sequence>
+      <element name="header" type="tns:mail-header-config" maxOccurs="unbounded"/>
+    </sequence>
+  </complexType>
+
+  <complexType name="mail-header-config">
+    <attribute name="name" type="string" use="required"/>
+    <attribute name="value" type="string" use="required"/>
+  </complexType>
+
+  <complexType name="protocols-config">
+    <sequence>
+      <element name="protocol" type="string" minOccurs="1" maxOccurs="unbounded"/>
+    </sequence>
+  </complexType>
+
+  <complexType name="session-properties-config">
+    <sequence>
+      <element name="session-property" type="tns:session-property-config" minOccurs="1" maxOccurs="unbounded"/>
+    </sequence>
+  </complexType>
+
+  <complexType name="session-property-config">
+    <attribute name="name" type="string" use="required"/>
+    <attribute name="value" type="string" use="required"/>
+  </complexType>
+</schema>
