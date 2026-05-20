@@ -49,7 +49,7 @@ Accel Platform Docker stacks は、初期設定の状態で下記バージョン
 ## macOS (Apple Silicon) で利用する場合の制限事項
 
 このリポジトリの初期構成は SQL Server 2025 Developer Edition を採用していますが、SQL Server 2025 のコンテナイメージは **x86_64 (amd64) 専用** で公開されており、起動時に AVX / AVX2 CPU 命令を要求します。  
-macOS (Apple Silicon: M1 / M2 / M3 / M4) ホストでは Docker Desktop の Rosetta 2 経由でも AVX / AVX2 がエミュレートされないため、SQL Server 2025 コンテナは起動直後にクラッシュし続けます。
+macOS 26 (Tahoe) 以降の Apple Silicon (M1 / M2 / M3 / M4) ホストでは、Docker Desktop の Rosetta 2 経由で SQL Server 2025 コンテナを起動すると、AVX state 周りのエミュレーション仕様変更によって PAL (Platform Abstraction Layer) 初期化中にアサーションエラーで必ずクラッシュします。これは Microsoft 公式に複数の Issue として報告されている既知の問題で、SQL Server 側の Cumulative Update (CU1 / CU2 / CU3 / CU4 / CU4-GDR1) では解消されません (本リポジトリでも全タグを検証して確認済み)。
 
 x86_64 Linux / x86_64 Windows ホストで利用する場合、本セクションの対応は不要です。
 
@@ -66,7 +66,38 @@ sqlserver-1 |     Last errno: 2
 sqlserver-1 | Last errno text: No such file or directory
 ```
 
-`Last errno: 2 (No such file or directory)` はファイル欠落を意味するものではなく、PAL (Platform Abstraction Layer) 初期化失敗時に出力される汎用値です。
+クラッシュダンプ (`./data/sqlserver/log/core.sqlservr.*.d/` 配下) を確認すると、本質的なエラーは以下のアサーション失敗です。
+
+```text
+assertion failed [x86_avx_state_ptr->xsave_header.xfeatures == kSupportedXFeatureBits]:
+(ThreadContextSignals.cpp:414 rt_sigreturn)
+```
+
+`Last errno: 2 (No such file or directory)` はファイル欠落を意味するものではなく、PAL 初期化失敗時に出力される汎用フォールバック値です。
+
+### 既知の問題 (Microsoft 公式 Issue)
+
+本問題は Microsoft の SQL Server コンテナ公式リポジトリ ([microsoft/mssql-docker](https://github.com/microsoft/mssql-docker)) で複数の Issue として報告されています。執筆時点で Microsoft からの恒久的修正は提供されておらず、SQL Server 2022 イメージ等への切り替えがワークアラウンドとして案内されています。
+
+- [Issue #936 \- \[2025-latest\] Container crashes on macOS](https://github.com/microsoft/mssql-docker/issues/936)
+- [Issue #940 \- SQL Server 2025-latest container fails to start](https://github.com/microsoft/mssql-docker/issues/940)
+- [Issue #942 \- \[2025-latest\] Container crashes on macOS 26 (Tahoe)](https://github.com/microsoft/mssql-docker/issues/942)
+- [Issue #943 \- Segmentation fault running the 2025-latest image on macOS Tahoe](https://github.com/microsoft/mssql-docker/issues/943)
+- [Issue #955 \- \[2025-latest\] Container crashes on macOS 26 (Tahoe) and podman](https://github.com/microsoft/mssql-docker/issues/955)
+- 関連解説: [macOS Tahoe breaks SQL Server on Docker containers on Apple Silicon - Born SQL](https://bornsql.ca/blog/macos-tahoe-breaks-sql-server-on-docker-containers-on-apple-silicon/)
+
+### 検証結果 (本リポジトリで実施)
+
+Apple M1 (8 core, 16GB) + macOS Tahoe 26.4 (Darwin 25.4) + Docker Desktop 4.74.0 + Rosetta 2 有効の環境で、SQL Server 2025 系の主要タグを順に検証した結果:
+
+| イメージタグ | ベース OS | 結果 |
+| --- | --- | --- |
+| `mcr.microsoft.com/mssql/server:2025-latest` (≡ `2025-CU4-GDR1-ubuntu-24.04`) | Ubuntu 24.04 | ❌ PAL 初期化中にクラッシュ |
+| `mcr.microsoft.com/mssql/server:2025-CU1-ubuntu-24.04` | Ubuntu 24.04 | ❌ 同じ症状でクラッシュ |
+| `mcr.microsoft.com/mssql/server:2025-CU4-GDR1-ubuntu-22.04` | Ubuntu 22.04 | ❌ 同じ症状でクラッシュ |
+| `mcr.microsoft.com/mssql/server:2022-latest` | Ubuntu 22.04 | ✅ 正常起動 (healthy) |
+
+CU レベルやベース OS バージョンに関係なく SQL Server 2025 系は全滅、SQL Server 2022 のみ正常動作することが確認されました。
 
 ### 回避手順
 
@@ -125,6 +156,14 @@ docker exec docker-stacks-sqlserver-sqlserver-1 \
 - 同梱の JDBC ドライバ `mssql-jdbc-13.4.0.jre11.jar` は SQL Server 2017 / 2019 / 2022 / 2025 を公式サポート対象としているため、ダウングレードに伴うドライバ変更は不要です。
 - JDBC 接続文字列 (`data/juggling/war/WEB-INF/resin-web.xml` 内の `jdbc:sqlserver://sqlserver:1433;DatabaseName=master;encrypt=false`) も変更不要です。
 - 上記回避手順を恒久的にリポジトリへ反映するか否かはチーム方針で判断してください。本セクションはホストアーキテクチャ依存のため、Apple Silicon 利用者向けのローカル対応として位置付けています。
+
+### どうしても SQL Server 2025 を Apple Silicon で動かしたい場合
+
+SQL Server 2025 固有機能 (ベクトル検索、JSON ネイティブ型 等) を必要とする場合は、以下の代替手段が報告されています。本リポジトリでは未検証のため、利用時はチーム内で動作確認を行ってください。
+
+- **OrbStack に切り替える**: Docker Desktop 代替のコンテナランタイム。x86_64 エミュレーションで AVX 命令対応が優秀との複数報告あり、`brew install orbstack` でインストール可能。`docker` CLI はそのまま利用できる。
+- **Parallels Desktop + Windows 11 ARM64 + SQL Server 2025**: 仮想化環境で Windows 版 SQL Server を動かす。Microsoft 公式に近い構成で安定性は高いが、Parallels ライセンスと Windows ライセンスが別途必要。
+- **x86_64 ホスト (Linux / Windows / 別 PC) を利用する**: 開発用 SQL Server だけ別マシンに分離する案。CI/CD やリモート開発環境を活用する場合に検討。
 
 ## 構成
 
