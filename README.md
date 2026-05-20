@@ -82,7 +82,7 @@ Accel Platform Docker stacks は、初期設定の状態で下記バージョン
 git clone #TODO#
 ```
 
-[Git LFS](../README.md#前提条件)をインストールしていない場合、standalone/imm/lib、standalone/juggling-build-war/libが正しくダウンロードできず、サイズが非常に小さいファイルになることがあります。  
+[Git LFS](../README.md#前提条件)をインストールしていない場合、imm/lib、juggling-build-war/libが正しくダウンロードできず、サイズが非常に小さいファイルになることがあります。  
 lib配下のファイルサイズが極端に小さい場合は、LFSがインストール、初期化されているかをご確認ください。
 
 ## 資材の準備
