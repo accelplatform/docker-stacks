@@ -86,19 +86,6 @@ assertion failed [x86_avx_state_ptr->xsave_header.xfeatures == kSupportedXFeatur
 - [Issue #955 \- \[2025-latest\] Container crashes on macOS 26 (Tahoe) and podman](https://github.com/microsoft/mssql-docker/issues/955)
 - 関連解説: [macOS Tahoe breaks SQL Server on Docker containers on Apple Silicon - Born SQL](https://bornsql.ca/blog/macos-tahoe-breaks-sql-server-on-docker-containers-on-apple-silicon/)
 
-### 検証結果 (本リポジトリで実施)
-
-Apple M1 (8 core, 16GB) + macOS Tahoe 26.4 (Darwin 25.4) + Docker Desktop 4.74.0 + Rosetta 2 有効の環境で、SQL Server 2025 系の主要タグを順に検証した結果:
-
-| イメージタグ | ベース OS | 結果 |
-| --- | --- | --- |
-| `mcr.microsoft.com/mssql/server:2025-latest` (≡ `2025-CU4-GDR1-ubuntu-24.04`) | Ubuntu 24.04 | ❌ PAL 初期化中にクラッシュ |
-| `mcr.microsoft.com/mssql/server:2025-CU1-ubuntu-24.04` | Ubuntu 24.04 | ❌ 同じ症状でクラッシュ |
-| `mcr.microsoft.com/mssql/server:2025-CU4-GDR1-ubuntu-22.04` | Ubuntu 22.04 | ❌ 同じ症状でクラッシュ |
-| `mcr.microsoft.com/mssql/server:2022-latest` | Ubuntu 22.04 | ✅ 正常起動 (healthy) |
-
-CU レベルやベース OS バージョンに関係なく SQL Server 2025 系は全滅、SQL Server 2022 のみ正常動作することが確認されました。
-
 ### 回避手順
 
 SQL Server 2022 Developer Edition (AVX を要求しない) へダウングレードすることで Apple Silicon + Rosetta 2 環境でも起動可能です。SQL Server 2025 固有機能 (JSON ネイティブ型、ベクトル検索 等) を利用しない場合は機能要件を満たします。
@@ -156,14 +143,6 @@ docker exec docker-stacks-sqlserver-sqlserver-1 \
 - 同梱の JDBC ドライバ `mssql-jdbc-13.4.0.jre11.jar` は SQL Server 2017 / 2019 / 2022 / 2025 を公式サポート対象としているため、ダウングレードに伴うドライバ変更は不要です。
 - JDBC 接続文字列 (`data/juggling/war/WEB-INF/resin-web.xml` 内の `jdbc:sqlserver://sqlserver:1433;DatabaseName=master;encrypt=false`) も変更不要です。
 - 上記回避手順を恒久的にリポジトリへ反映するか否かはチーム方針で判断してください。本セクションはホストアーキテクチャ依存のため、Apple Silicon 利用者向けのローカル対応として位置付けています。
-
-### どうしても SQL Server 2025 を Apple Silicon で動かしたい場合
-
-SQL Server 2025 固有機能 (ベクトル検索、JSON ネイティブ型 等) を必要とする場合は、以下の代替手段が報告されています。本リポジトリでは未検証のため、利用時はチーム内で動作確認を行ってください。
-
-- **OrbStack に切り替える**: Docker Desktop 代替のコンテナランタイム。x86_64 エミュレーションで AVX 命令対応が優秀との複数報告あり、`brew install orbstack` でインストール可能。`docker` CLI はそのまま利用できる。
-- **Parallels Desktop + Windows 11 ARM64 + SQL Server 2025**: 仮想化環境で Windows 版 SQL Server を動かす。Microsoft 公式に近い構成で安定性は高いが、Parallels ライセンスと Windows ライセンスが別途必要。
-- **x86_64 ホスト (Linux / Windows / 別 PC) を利用する**: 開発用 SQL Server だけ別マシンに分離する案。CI/CD やリモート開発環境を活用する場合に検討。
 
 ## 構成
 
