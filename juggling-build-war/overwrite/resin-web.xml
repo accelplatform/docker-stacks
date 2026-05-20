@@ -13,7 +13,7 @@
   <database jndi-name="jdbc/default">
     <driver>
       <type>com.microsoft.sqlserver.jdbc.SQLServerConnectionPoolDataSource</type>
-      <url>jdbc:sqlserver://sqlserver:1433;DatabaseName=master;encrypt=false</url>
+      <url>jdbc:sqlserver://sqlserver:1433;DatabaseName=iap_db;encrypt=false</url>
       <user>imart</user>
       <password>Str0ng!Pass123</password>
       <selectMethod>cursor</selectMethod>

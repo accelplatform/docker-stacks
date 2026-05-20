@@ -71,14 +71,22 @@ services:
       MSSQL_SA_PASSWORD: TestPass123
       APP_USER: imart
       APP_USER_PASSWORD: Str0ng!Pass123
+      APP_DB: iap_db
+      APP_DB_COLLATION: Japanese_XJIS_100_CS_AS_KS_WS
       MSSQL_LCID: 1041
-      MSSQL_COLLATION: Japanese_XJIS_100_CS_AS_KS_WS
+      # MSSQL_COLLATION は削除 (アプリ用DB単位で照合順序を指定するため)
       MSSQL_PID: "Developer"
-    restart: always
+    restart: "on-failure:3"
     volumes:
       - ./data/sqlserver:/var/opt/mssql
     ports:
       - 1433:1433
+    healthcheck:
+      test: ["CMD-SHELL", "test -f /var/opt/mssql/.initialization_complete"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 180s
   mailpit:
     image: axllent/mailpit:v1.27
     restart: always
