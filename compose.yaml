@@ -73,8 +73,6 @@ services:
       APP_USER_PASSWORD: Str0ng!Pass123
       APP_DB: iap_db
       APP_DB_COLLATION: Japanese_XJIS_100_CS_AS_KS_WS
-      MSSQL_LCID: 1041
-      # MSSQL_COLLATION は削除 (アプリ用DB単位で照合順序を指定するため)
       MSSQL_PID: "Developer"
     restart: "on-failure:3"
     volumes:
