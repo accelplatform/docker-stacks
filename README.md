@@ -462,7 +462,7 @@ docker compose down
 # 必要に応じてテスト実行エージェントも停止する
 # docker compose down accelstudio-testing-agent
 # データの削除（消したい永続化データのディレクトリを指定）　
-sudo rm -rf data/cassandra data/httpd data/mailpit data/postgres data/resin data/solr data/accelstudio-testing-agent
+sudo rm -rf data/cassandra data/httpd data/mailpit data/postgresql data/resin data/solr data/accelstudio-testing-agent
 # コンテナの起動
 docker compose up -d
 ```
