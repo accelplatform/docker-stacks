@@ -141,8 +141,6 @@ docker exec docker-stacks-sqlserver-sqlserver-1 \
 ### 補足
 
 - 同梱の JDBC ドライバ `mssql-jdbc-13.4.0.jre11.jar` は SQL Server 2017 / 2019 / 2022 / 2025 を公式サポート対象としているため、ダウングレードに伴うドライバ変更は不要です。
-- JDBC 接続文字列 (`data/juggling/war/WEB-INF/resin-web.xml` 内の `jdbc:sqlserver://sqlserver:1433;DatabaseName=master;encrypt=false`) も変更不要です。
-- 上記回避手順を恒久的にリポジトリへ反映するか否かはチーム方針で判断してください。本セクションはホストアーキテクチャ依存のため、Apple Silicon 利用者向けのローカル対応として位置付けています。
 
 ## 構成
 
