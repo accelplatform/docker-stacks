@@ -23,12 +23,26 @@ Accel Platform Docker stacks は、初期設定の状態で下記バージョン
 
 - カスタマーサクセスライセンスを有していること
   - [intra-mart Accel Platform セットアップガイド - ライセンスについて](https://document.intra-mart.jp/library/iap/public/setup/iap_setup_guide/texts/license_registration/index.html#license-type)
-- `Git` がインストールされていること
-  - [git - Install](https://git-scm.com/install/windows)
-- `Git LFS` がインストールされていること
-  - [git-lfs](https://github.com/git-lfs/git-lfs/wiki/Installation)
-- `Docker` がインストールされていること
+- `Docker` (WSL)がインストールされていること
   - [dockerdocs - Install Docker Desktop on Windows](https://docs.docker.com/desktop/setup/install/windows-install/)
+    - WSLに `Ubuntu` をインストールすること
+
+      ```sh
+      # Powershell 等のターミナルで以下を実行 ※Ubuntuユーザ／パスワード設定をします
+      wsl --install -d Ubuntu
+      ```
+
+      インストール後はアプリにUbuntuターミナルが追加され、エクスプローラのツリーにLinux > Ubuntuが表示されます。  
+      Ubuntu操作はUbuntuターミナルから行います。
+      - Ubuntuに `Git` がインストールされていること
+        - [git - Install](https://git-scm.com/install/windows)
+      - Ubuntuに `Git LFS` がインストールされていること
+        - [git-lfs](https://github.com/git-lfs/git-lfs/wiki/Installation)
+
+    - Dockerサポートを有効化すること  
+      Docker Desktop UI の settings > Resources > WSL Integration で以下を設定して「Apply & Restart」をクリックします。
+      - Enable integration with my default WSL distroにチェックを入れる
+      - Ubuntuを有効にする
 
 ### Tips
 
@@ -75,7 +89,7 @@ Accel Platform Docker stacks は、初期設定の状態で下記バージョン
 ## クローン
 
 下記コマンドを実行することにより、Gitからリポジトリがクローンされます
-`Docker Desktop` を利用する場合、PowerShell等のターミナルから実行してください。
+Ubuntuのターミナルから実行してください。
 
 ```sh
 # Gitクローン
@@ -118,7 +132,6 @@ docker-stacks/
       └── overwrite/
           └── lib/
               └── ojdbc11.jar
-
 ```
 
 ### Tips
@@ -126,20 +139,20 @@ docker-stacks/
 - プロキシ環境の場合、resin/overwrite/conf ディレクトリの resin.properties もしくは resin.xml にプロキシの設定が必要なケースがあります。  
   外部サービスとの接続に失敗する場合は以下を確認してください。
   - [プロキシ環境下で intra-mart AccelPlatform から外部サイトにアクセスする方法を教えてください。](https://product.intra-mart.support/hc/ja/articles/20083075832473-%E3%83%97%E3%83%AD%E3%82%AD%E3%82%B7%E7%92%B0%E5%A2%83%E4%B8%8B%E3%81%A7-intra-mart-AccelPlatform-%E3%81%8B%E3%82%89%E5%A4%96%E9%83%A8%E3%82%B5%E3%82%A4%E3%83%88%E3%81%AB%E3%82%A2%E3%82%AF%E3%82%BB%E3%82%B9%E3%81%99%E3%82%8B%E6%96%B9%E6%B3%95%E3%82%92%E6%95%99%E3%81%88%E3%81%A6%E3%81%8F%E3%81%A0%E3%81%95%E3%81%84)
-- Cassandra、Solrの資材を設置せず[コンテナのビルド](#コンテナのビルド)を実施するとエラーとなります。環境に含めない場合は、 compose.yaml の `cassandra` `solr` サービス全体と、`resin` - `depends_on` の `cassandra` `solr` をコメントアウトすることで、ビルド、サービス起動から除外できます。
+- Cassandra、Solrの資材を設置せず[イメージのビルド](#イメージのビルド)を実施するとエラーとなります。環境に含めない場合は、 compose.yaml の `cassandra` `solr` サービス全体と、`resin` - `depends_on` の `cassandra` `solr` をコメントアウトすることで、ビルド、サービス起動から除外できます。
 
 ## コンテナのセットアップ
 
-### コンテナのビルド
+### イメージのビルド
 
 下記コマンドを実行することにより、コンテナイメージの作成が行われます。
 
 ```sh
 # カレントディレクトリをdocker-stacksにする
 cd docker-stacks
-# メイン（resin、httpd、oracle等）
+# メイン（resin、httpd、oracle等）イメージのビルド
 docker compose build --no-cache
-# war作成＋静的ファイル配置
+# war作成＋静的ファイル配置イメージのビルド
 docker compose build --no-cache juggling-build-war
 ```
 
@@ -153,6 +166,7 @@ juggling プロジェクトを差し替える場合は[ユーザ作成のJugglin
 [Accel Studio テスト機能 テスト実行エージェント](#accel-studio-テスト機能-テスト実行エージェント)を利用しない場合は accel-studio-testing-config.xml で `testing-enabled` を `false` に設定してください。
 
 ```sh
+# war, 静的ファイルのビルド
 docker compose run --rm juggling-build-war
 ```
 
@@ -199,7 +213,7 @@ statusがup状態であればコンテナは起動しています。コンテナ
 
 ### Oracleエラーで起動しない場合
 
-Ubutun＋Docker環境では以下のようなエラーが出て正常に起動できない場合があります。
+Ubutun環境では以下のようなエラーが出て正常に起動できない場合があります。
 
 ```sh
 # コンテナを起動（フォアグラウンド・モード）
@@ -244,7 +258,8 @@ docker compose up
 
 #### Tips
 
-テナントセットアップ後はアクティベーションを実行してください。
+テナントセットアップ後はアクティベーションを実行してください。  
+[intra-mart Accel Platform ライセンスポータル操作ガイド - 環境を利用するための手続き](https://document.intra-mart.jp/library/iap/public/im_license_portal/im_license_portal_user_guide/texts/basic_guide/environment/procedure.html#environment-procedure)
 
 ### テナント画面へのログイン
 
@@ -354,7 +369,7 @@ docker compose restart httpd
 Accel Studio テスト機能 テスト実行エージェントはメインイメージに含まれていないため、以下のコマンドでビルドします。
 
 ```sh
-# イメージのビルド
+# テスト実行エージェントイメージのビルド
 docker compose build --no-cache accelstudio-testing-agent
 ```
 
@@ -375,7 +390,7 @@ docker compose down accelstudio-testing-agent
 
 #### ベースURL
 
-初期状態の設定のベースURL（ http://127.0.0.1/imart ）を使用しない場合、`.env`ファイルに含まれる`ACCELSTUDIO_TESTING_AGENT_ACCELPLATFORM_BASE_URL`環境変数でベースURLを適切に設定してください。
+初期状態の設定のベースURL（ http://127.0.0.1/imart ）を使用しない場合、`.env`ファイルに含まれる`ACCELSTUDIO_TESTING_AGENT_ACCELPLATFORM_BASE_URL`環境変数でベースURLを適切に設定してください。  
 ベースURLが不適切な場合、エージェントがテスト対象のURLにアクセスする際に認証に失敗する可能性があります。
 
 #### バージョンによるエラー
@@ -399,12 +414,13 @@ data/accelstudio-testing-agent/logs/accel_studio_testing_agent.log
 
 ユーザモジュール（immファイル）を環境に適用する機能です。
 
-これは、開発用途を考えた機能であり、本番環境での利用は推奨されません。
+これは、開発用途を考えた機能であり、本番環境での利用は推奨されません。  
 本番環境の場合は Juggling プロジェクトへモジュールを追加し、ビルドを行って下さい。
 
 以下のコマンドを実行することにより、イメージをビルドします。
 
 ```sh
+# ユーザモジュールの追加展開イメージのビルド
 docker compose build --no-cache extract-imm
 ```
 
@@ -500,7 +516,7 @@ docker compose down
 # 必要に応じてテスト実行エージェントも停止する
 # docker compose down accelstudio-testing-agent
 # データの削除（消したい永続化データのディレクトリを指定）　
-Remove-Item -Recurse -Force data/cassandra, data/httpd, data/mailpit, data/oracle, data/resin, data/solr, data/accelstudio-testing-agent
+sudo rm -rf data/cassandra data/httpd data/mailpit data/oracle data/resin data/solr data/accelstudio-testing-agent
 # コンテナの起動
 docker compose up -d
 ```
@@ -509,12 +525,12 @@ docker compose up -d
 
 ```sh
 # プロジェクト以外のjuggling成果物を初期化したい場合
-Remove-Item -Recurse -Force data/juggling/public, data/juggling/repository, data/juggling/war, data/juggling/imart.war, data/juggling/imart.zip
+sudo rm -rf data/juggling/public data/juggling/repository data/juggling/war data/juggling/imart.war data/juggling/imart.zip
 ```
 
 ### 部分的に資材を追加する場合
 
-`data/juggling/public` 及び `data/juggling/war` ディレクトリはそれぞれのサービスにマウントされています。
+`data/juggling/public` 及び `data/juggling/war` ディレクトリはそれぞれのサービスにマウントされています。  
 その為、それぞれのディレクトリに必要となる資材を追加し、コンテナを再起動することで [war, 静的ファイルのビルド](#war-静的ファイルのビルド) せずに変更内容を反映することが可能です。
 
 ```sh
