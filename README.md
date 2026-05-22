@@ -46,6 +46,102 @@ Accel Platform Docker stacks は、初期設定の状態で下記バージョン
   環境に合わせて以下を適宜設定します。  
   Docker Desktop UI の settings > Resources > Proxies で設定。
 
+## macOS (Apple Silicon) で利用する場合の制限事項
+
+このリポジトリの初期構成は SQL Server 2025 Developer Edition を採用していますが、SQL Server 2025 のコンテナイメージは **x86_64 (amd64) 専用** で公開されており、起動時に AVX / AVX2 CPU 命令を要求します。  
+macOS 26 (Tahoe) 以降の Apple Silicon (M1 / M2 / M3 / M4) ホストでは、Docker Desktop の Rosetta 2 経由で SQL Server 2025 コンテナを起動すると、AVX state 周りのエミュレーション仕様変更によって PAL (Platform Abstraction Layer) 初期化中にアサーションエラーで必ずクラッシュします。これは Microsoft 公式に複数の Issue として報告されている既知の問題で、SQL Server 側の Cumulative Update (CU1 / CU2 / CU3 / CU4 / CU4-GDR1) では解消されません (本リポジトリでも全タグを検証して確認済み)。
+
+x86_64 Linux / x86_64 Windows ホストで利用する場合、本セクションの対応は不要です。
+
+### 症状
+
+`docker compose logs sqlserver` に以下のようなクラッシュログが繰り返し出力され、コンテナが `healthy` になりません。
+
+```text
+sqlserver-1 | This program has encountered a fatal error and cannot continue running ...
+sqlserver-1 |     Stack Trace:
+sqlserver-1 |                  file://package6/windows/system32/sqlpal.dll+0x...
+sqlserver-1 |        Process: 12 - sqlservr
+sqlserver-1 |     Last errno: 2
+sqlserver-1 | Last errno text: No such file or directory
+```
+
+クラッシュダンプ (`./data/sqlserver/log/core.sqlservr.*.d/` 配下) を確認すると、本質的なエラーは以下のアサーション失敗です。
+
+```text
+assertion failed [x86_avx_state_ptr->xsave_header.xfeatures == kSupportedXFeatureBits]:
+(ThreadContextSignals.cpp:414 rt_sigreturn)
+```
+
+`Last errno: 2 (No such file or directory)` はファイル欠落を意味するものではなく、PAL 初期化失敗時に出力される汎用フォールバック値です。
+
+### 既知の問題 (Microsoft 公式 Issue)
+
+本問題は Microsoft の SQL Server コンテナ公式リポジトリ ([microsoft/mssql-docker](https://github.com/microsoft/mssql-docker)) で複数の Issue として報告されています。執筆時点で Microsoft からの恒久的修正は提供されておらず、SQL Server 2022 イメージ等への切り替えがワークアラウンドとして案内されています。
+
+- [Issue #936 \- \[2025-latest\] Container crashes on macOS](https://github.com/microsoft/mssql-docker/issues/936)
+- [Issue #940 \- SQL Server 2025-latest container fails to start](https://github.com/microsoft/mssql-docker/issues/940)
+- [Issue #942 \- \[2025-latest\] Container crashes on macOS 26 (Tahoe)](https://github.com/microsoft/mssql-docker/issues/942)
+- [Issue #943 \- Segmentation fault running the 2025-latest image on macOS Tahoe](https://github.com/microsoft/mssql-docker/issues/943)
+- [Issue #955 \- \[2025-latest\] Container crashes on macOS 26 (Tahoe) and podman](https://github.com/microsoft/mssql-docker/issues/955)
+- 関連解説: [macOS Tahoe breaks SQL Server on Docker containers on Apple Silicon - Born SQL](https://bornsql.ca/blog/macos-tahoe-breaks-sql-server-on-docker-containers-on-apple-silicon/)
+
+### 回避手順
+
+SQL Server 2022 Developer Edition (AVX を要求しない) へダウングレードすることで Apple Silicon + Rosetta 2 環境でも起動可能です。SQL Server 2025 固有機能 (JSON ネイティブ型、ベクトル検索 等) を利用しない場合は機能要件を満たします。
+
+#### 1. Docker Desktop の Rosetta 2 を有効化
+
+Docker Desktop → Settings → General → 「Use Rosetta for x86_64/amd64 emulation on Apple Silicon」を ON にします。
+
+#### 2. `compose.yaml` の `sqlserver` サービスを編集
+
+`platform: linux/amd64` の明示と `image` タグの変更、および `build.platforms` の追加を行います。
+
+```yaml
+  sqlserver:
+    image: $DOCKER_IMAGE_REPOSITORY/${DOCKER_IMAGE_TAG_PREFIX}sqlserver:2022-latest
+    platform: linux/amd64
+    build:
+      context: ./sqlserver
+      platforms:
+        - linux/amd64
+    user: root
+    # 以下、既存の environment / volumes / ports 等はそのまま
+```
+
+#### 3. `sqlserver/Dockerfile` のベースイメージを変更
+
+```diff
+-FROM mcr.microsoft.com/mssql/server:2025-latest
++FROM mcr.microsoft.com/mssql/server:2022-latest
+```
+
+#### 4. 過去の初期化途中データがある場合はクリーンアップ
+
+SQL Server 2025 で起動を試みた後に切り替える場合、`./data/sqlserver/` 配下に初期化が途中で停止した残骸が残ります。クラッシュログを退避してからディレクトリを作り直してください。
+
+```sh
+docker compose down sqlserver
+mv ./data/sqlserver/log /tmp/sqlserver-crashlog-$(date +%s) 2>/dev/null || true
+rm -rf ./data/sqlserver
+mkdir -p ./data/sqlserver
+docker compose up -d --build sqlserver
+```
+
+#### 5. 起動確認
+
+```sh
+docker compose ps sqlserver
+# STATUS が "Up (healthy)" になれば成功
+docker exec docker-stacks-sqlserver-sqlserver-1 \
+  /opt/mssql-tools18/bin/sqlcmd -C -S localhost -U sa -P "$MSSQL_SA_PASSWORD" -Q "SELECT @@VERSION"
+```
+
+### 補足
+
+- 同梱の JDBC ドライバ `mssql-jdbc-13.4.0.jre11.jar` は SQL Server 2017 / 2019 / 2022 / 2025 を公式サポート対象としているため、ダウングレードに伴うドライバ変更は不要です。
+
 ## 構成
 
 ```
