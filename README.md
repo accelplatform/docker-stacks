@@ -91,7 +91,7 @@ Ubuntuのターミナルから実行してください。
 
 ```sh
 # Gitクローン
-git clone #TODO#
+git clone https://github.com/accelplatform/docker-stacks.git
 ```
 
 [Git LFS](../README.md#前提条件)をインストールしていない場合、imm/lib、juggling-build-war/libが正しくダウンロードできず、サイズが非常に小さいファイルになることがあります。  
