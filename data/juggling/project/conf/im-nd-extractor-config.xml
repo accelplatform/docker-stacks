@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<im-nd-extractor-config
+    xmlns="http://intra-mart.co.jp/system/im_nd_universalextractor/internal/utility/config/im-nd-extractor-config"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://intra-mart.co.jp/system/im_nd_universalextractor/internal/utility/config/im-nd-extractor-config ../schema/im-nd-extractor-config.xsd ">
+
+  <default-extractor>
+    <default>
+      <min-size>0</min-size>
+      <max-size>100M</max-size>
+      <properties>
+        <!-- temporary directory sample for Linux -->
+        <property name="tmpDir" type="string">/tmp</property>
+        <!-- temporary directory sample for Windows -->
+        <!--
+        <property name="tmpDir" type="string">C:\temp</property>
+        -->
+      </properties>
+    </default>
+    <mapping>
+      <!-- Entry for text files -->
+      <entry type="text/plain" extension="txt" max-size="1M" class="jp.co.nttdata.intra_mart.contentssearch.text.extraction.extractor.PlainTextExtractor" />
+
+      <!-- Entry for HTML files -->
+      <entry type="text/html" extension="htm,html" max-size="1M" class="jp.co.nttdata.intra_mart.contentssearch.text.extraction.extractor.HtmlExtractor" />
+
+      <!-- Entry for XML files -->
+      <entry type="text/xml" extension="xml" max-size="1M" class="jp.co.nttdata.intra_mart.contentssearch.text.extraction.extractor.XmlExtractor" />
+
+      <!-- Entry for Word files -->
+      <entry type="application/msword" extension="doc" class="jp.co.nttdata.intra_mart.contentssearch.text.extraction.extractor.WordExtractor" />
+      <entry type="application/vnd.openxmlformats-officedocument.wordprocessingml.document" extension="docx" class="jp.co.nttdata.intra_mart.contentssearch.text.extraction.extractor.WordxExtractor" />
+
+      <!-- Entry for Excel files -->
+      <entry type="application/vnd.ms-excel" extension="xls" max-size="10M" class="jp.co.nttdata.intra_mart.contentssearch.text.extraction.extractor.ExcelExtractor" />
+      <entry type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" extension="xlsx" max-size="10M" class="jp.co.nttdata.intra_mart.contentssearch.text.extraction.extractor.ExcelxExtractor" />
+
+      <!-- Entry for PowerPoint files -->
+      <entry type="application/vnd.ms-powerpoint" extension="ppt" class="jp.co.nttdata.intra_mart.contentssearch.text.extraction.extractor.PowerPointExtractor" />
+      <entry type="application/vnd.openxmlformats-officedocument.presentationml.presentation" extension="pptx" class="jp.co.nttdata.intra_mart.contentssearch.text.extraction.extractor.PowerPointxExtractor" />
+
+      <!-- Entry for Visio files -->
+      <entry type="application/vnd.visio" extension="vsd" class="jp.co.nttdata.intra_mart.contentssearch.text.extraction.extractor.VisioExtractor" />
+
+      <!-- Entry for zip files -->
+      <entry type="application/zip" extension="zip" class="jp.co.nttdata.intra_mart.contentssearch.text.extraction.extractor.ZipExtractor" />
+
+      <!-- Entry for PDF files -->
+      <entry type="application/pdf" extension="pdf" precedence="1" class="jp.co.nttdata.intra_mart.contentssearch.text.extraction.extractor.PdfExtractor" />
+
+
+      <!-- 以下の要素は無効化されています -->
+
+      <!-- xpdfを利用してPDFを処理する設定 -->
+      <entry enabled="false" type="application/pdf" extension="pdf" precedence="3" class="jp.co.nttdata.intra_mart.contentssearch.text.extraction.extractor.XpdfExtractor">
+        <property name="exeFile" type="string">C:\pdftotext_home\pdftotext.exe</property>
+      </entry>
+
+      <!-- xdoc2txtを利用してPDFを処理する設定 -->
+      <entry enabled="false" type="application/pdf" extension="pdf" precedence="2" class="jp.co.nttdata.intra_mart.contentssearch.text.extraction.extractor.Xdoc2txtExtractor">
+        <property name="tmpExtension" type="string">pdf</property>
+        <property name="exeFile" type="string">C:\xdoc2txt_home\xdoc2txt.exe</property>
+      </entry>
+
+      <!-- DocuWorksファイルを処理するLinux向けの設定 -->
+      <entry enabled="false" type="application/vnd.fujixerox.docuworks" extension="xdw" precedence="1" class="jp.co.intra_mart.foundation.contentssearch.extraction.extractor.DocuWorksExtractor4Linux">
+        <property name="tmpExtension" type="string">xdw</property>
+        <property name="exeFile" type="string">xdw2text</property>
+      </entry>
+      <entry enabled="false" type="application/vnd.fujixerox.docuworks.binder" extension="xbd" precedence="1" class="jp.co.intra_mart.foundation.contentssearch.extraction.extractor.DocuWorksExtractor4Linux">
+        <property name="tmpExtension" type="string">xbd</property>
+        <property name="exeFile" type="string">xdw2text</property>
+      </entry>
+
+      <!-- DocuWorksファイルを処理するWindows向けの設定 -->
+      <entry enabled="false" type="application/vnd.fujixerox.docuworks" extension="xdw" precedence="1" class="jp.co.intra_mart.foundation.contentssearch.extraction.extractor.DocuWorksExtractor4Windows">
+        <property name="tmpExtension" type="string">xdw</property>
+      </entry>
+      <entry enabled="false" type="application/vnd.fujixerox.docuworks.binder" extension="xbd" precedence="1" class="jp.co.intra_mart.foundation.contentssearch.extraction.extractor.DocuWorksExtractor4Windows">
+        <property name="tmpExtension" type="string">xbd</property>
+      </entry>
+
+    </mapping>
+  </default-extractor>
+
+</im-nd-extractor-config>
