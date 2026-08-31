@@ -19,6 +19,7 @@ services:
       BASE_URL: $BASE_URL
     ports:
       - 8080:8080
+      - 9000:9000
     #   - 8443:8443
     volumes:
       - ./resin/overwrite/conf/resin.properties:/opt/resin/conf/resin.properties
