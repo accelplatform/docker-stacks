@@ -29,6 +29,6 @@ RUN cp -r overwrite/* resin/ && \
 
 WORKDIR /opt/resin
 
-EXPOSE 8080
+EXPOSE 8080 9000
 
 ENTRYPOINT [ "bin/resinctl", "console" ]
