@@ -91,7 +91,7 @@ Ubuntuのターミナルから実行してください。
 
 ```sh
 # Gitクローン
-git clone https://github.com/accelplatform/docker-stacks.git
+git clone -b 2026spring-postgres https://github.com/accelplatform/docker-stacks.git
 ```
 
 [Git LFS](../README.md#前提条件)をインストールしていない場合、imm/lib、juggling-build-war/libが正しくダウンロードできず、サイズが非常に小さいファイルになることがあります。  
@@ -99,7 +99,7 @@ lib配下のファイルサイズが極端に小さい場合は、LFSがイン�
 
 ## 資材の準備
 
-ライセンスポータルから資材をダウンロードして、以下の通りディレクトリに配置します。
+ライセンスポータルから資材をダウンロードして、以下の通りディレクトリに配置します。  
 [intra-mart Accel Platform ライセンスポータル操作ガイド - リソースをダウンロードする](https://document.intra-mart.jp/library/iap/public/im_license_portal/im_license_portal_user_guide/texts/basic_guide/resource/download_resource_file.html)
 
 - resin-pro-4.0.67.tar.gz
@@ -125,20 +125,20 @@ docker-stacks/
 - プロキシ環境の場合、resin/overwrite/conf ディレクトリの resin.properties もしくは resin.xml にプロキシの設定が必要なケースがあります。  
   外部サービスとの接続に失敗する場合は以下を確認してください。
   - [プロキシ環境下で intra-mart AccelPlatform から外部サイトにアクセスする方法を教えてください。](https://product.intra-mart.support/hc/ja/articles/20083075832473-%E3%83%97%E3%83%AD%E3%82%AD%E3%82%B7%E7%92%B0%E5%A2%83%E4%B8%8B%E3%81%A7-intra-mart-AccelPlatform-%E3%81%8B%E3%82%89%E5%A4%96%E9%83%A8%E3%82%B5%E3%82%A4%E3%83%88%E3%81%AB%E3%82%A2%E3%82%AF%E3%82%BB%E3%82%B9%E3%81%99%E3%82%8B%E6%96%B9%E6%B3%95%E3%82%92%E6%95%99%E3%81%88%E3%81%A6%E3%81%8F%E3%81%A0%E3%81%95%E3%81%84)
-- Cassandra、Solrの資材を設置せず[コンテナのビルド](#コンテナのビルド)を実施するとエラーとなります。環境に含めない場合は、 compose.yaml の `cassandra` `solr` サービス全体と、`resin` - `depends_on` の `cassandra` `solr` をコメントアウトすることで、ビルド、サービス起動から除外できます。
+- Cassandra、Solrの資材を設置せず[イメージのビルド](#イメージのビルド)を実施するとエラーとなります。環境に含めない場合は、 compose.yaml の `cassandra` `solr` サービス全体と、`resin` - `depends_on` の `cassandra` `solr` をコメントアウトすることで、ビルド、サービス起動から除外できます。
 
 ## コンテナのセットアップ
 
-### コンテナのビルド
+### イメージのビルド
 
 下記コマンドを実行することにより、コンテナイメージの作成が行われます。
 
 ```sh
 # カレントディレクトリをdocker-stacksにする
 cd docker-stacks
-# メイン（resin、httpd、postgresql等）
+# メイン（resin、httpd、postgresql等）イメージのビルド
 docker compose build --no-cache
-# war作成＋静的ファイル配置
+# war作成＋静的ファイル配置イメージのビルド
 docker compose build --no-cache juggling-build-war
 ```
 
@@ -152,6 +152,7 @@ juggling プロジェクトを差し替える場合は[ユーザ作成のJugglin
 [Accel Studio テスト機能 テスト実行エージェント](#accel-studio-テスト機能-テスト実行エージェント)を利用しない場合は accel-studio-testing-config.xml で `testing-enabled` を `false` に設定してください。
 
 ```sh
+# war, 静的ファイルのビルド
 docker compose run --rm juggling-build-war
 ```
 
@@ -316,7 +317,7 @@ docker compose restart httpd
 Accel Studio テスト機能 テスト実行エージェントはメインイメージに含まれていないため、以下のコマンドでビルドします。
 
 ```sh
-# イメージのビルド
+# テスト実行エージェントイメージのビルド
 docker compose build --no-cache accelstudio-testing-agent
 ```
 
@@ -367,6 +368,7 @@ data/accelstudio-testing-agent/logs/accel_studio_testing_agent.log
 以下のコマンドを実行することにより、イメージをビルドします。
 
 ```sh
+# ユーザモジュールの追加展開イメージのビルド
 docker compose build --no-cache extract-imm
 ```
 
@@ -403,6 +405,7 @@ URL、ポート番号は以下となります。
 | :--------- | :--------------------------------------------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------- |
 | 80         | Web サーバ(Apache HTTPd)で利用しています。                       | http://127.0.0.1/imart/login<br>http://127.0.0.1/imart/system/login                                                                              |
 | 8080       | アプリケーションサーバ(Resin)で利用しています。                  | http://127.0.0.1:8080/imart/login<br>base-url を設定している場合は正しく表示されない可能性があります。                                           |
+| 9000       | サーバサイドスクリプトのデバッグで利用しています。               | Visual Studio Code の拡張機能（intra-mart e Builder for Accel Platform）にて接続                                                                 |
 | 8983       | 検索エンジン(Solr)で利用しています。                             | http://127.0.0.1:8983/solr                                                                                                                       |
 | 9160       | NoSQL データベース(Cassandra)で利用しています。                  | Thrift クライアントにて接続                                                                                                                      |
 | 5432       | データベース(PostgreSQL)で利用しています。                       | データベースクライアントアプリより接続<br> ホスト: 127.0.0.1<br>ポート: 5432<br>データベース名: iap_db<br>ユーザー名: imart<br>パスワード: imart |
@@ -424,7 +427,7 @@ TZ=Asia/Tokyo
 
 ### データの永続化
 
-`data`ディレクトリ配下に各サービスのデータが永続化されます。
+`data`ディレクトリ配下に各サービスのデータが永続化されます。  
 その為、コンテナの停止、起動を行った場合においても前回の状態を引き継ぐことができます。
 
 - `data/cassandra`
