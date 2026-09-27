@@ -18,7 +18,7 @@
     <selectbox-item-limit>30</selectbox-item-limit>
     <!-- セレクトボックス スクロール表示件数
     <selectbox-item-display-limit>20</selectbox-item-display-limit>
-    -->
+     -->
     <exclude-itemselect>product_72_checkbox</exclude-itemselect>
     <exclude-itemselect>product_72_listbox</exclude-itemselect>
     <exclude-itemselect>product_72_radio</exclude-itemselect>
@@ -29,6 +29,13 @@
     <exclude-itemselect>product_72_affiliationSelect</exclude-itemselect>
     <exclude-itemselect>product_72_formaAutoNo</exclude-itemselect>
     <exclude-itemselect>product_72_func</exclude-itemselect>
+    <exclude-itemselect>product_80_itemSelect</exclude-itemselect>
+    <exclude-itemselect>product_80_checkbox</exclude-itemselect>
+    <exclude-itemselect>product_80_radio</exclude-itemselect>
+    <exclude-itemselect>product_80_selectbox</exclude-itemselect>
+    <exclude-itemselect>product_80_listbox</exclude-itemselect>
+    <exclude-itemselect>product_80_fileImport</exclude-itemselect>
+    <exclude-itemselect>product_80_fileExport</exclude-itemselect>
     <exclude-itemselect>product_80_richtextbox</exclude-itemselect>
     <richtextbox-use-imui-data-url>false</richtextbox-use-imui-data-url>
     <ui-theme-mode>iap</ui-theme-mode>
@@ -76,6 +83,23 @@
       <item-path>forma/designer/types/product/extend/viewer</item-path>
       <item-path>forma/designer/types/product/80/richtextbox</item-path>
       <item-path>forma/designer/types/product/80/recycleButton</item-path>
+      <!-- BIS拡張アイテム -->
+      <item-path>forma/designer/types/product/80/bfRegistButton</item-path>
+      <item-path>forma/designer/types/product/80/iframe</item-path>
+      <item-path>forma/designer/types/product/80/itemSelect</item-path>
+      <item-path>forma/designer/types/product/80/table</item-path>
+      <item-path>forma/designer/types/product/80/checkbox</item-path>
+      <item-path>forma/designer/types/product/80/radio</item-path>
+      <item-path>forma/designer/types/product/80/selectbox</item-path>
+      <item-path>forma/designer/types/product/80/listbox</item-path>
+      <item-path>forma/designer/types/product/80/gridtable</item-path>
+      <item-path>forma/designer/types/product/80/fileImport</item-path>
+      <item-path>forma/designer/types/product/80/fileExport</item-path>
+      <item-path>forma/designer/types/product/80/imwModalRegisterButton</item-path>
+      <item-path>forma/designer/types/product/80/imwModalTempButton</item-path>
+      <item-path>forma/designer/types/product/80/imwDirectRunButton</item-path>
+      <item-path>forma/designer/types/product/80/imwDirectStopButton</item-path>
+      <item-path>forma/designer/types/product/80/imwDirectBackButton</item-path>
     </define-item>
     <default-grouping>
       <group>
@@ -86,23 +110,30 @@
         <item-id>product_72_func</item-id>
         <item-id>product_72_calendar</item-id>
         <item-id>product_72_terms</item-id>
-        <item-id>product_72_itemSelect</item-id>
-        <item-id>product_72_table</item-id>
-        <item-id>product_72_checkbox</item-id>
-        <item-id>product_72_radio</item-id>
-        <item-id>product_72_selectbox</item-id>
-        <item-id>product_72_listbox</item-id>
+        <item-id>product_80_itemSelect</item-id>
+        <item-id>product_80_table</item-id>
+        <item-id>product_80_checkbox</item-id>
+        <item-id>product_80_radio</item-id>
+        <item-id>product_80_selectbox</item-id>
+        <item-id>product_80_listbox</item-id>
         <item-id>product_72_fileupload</item-id>
+        <item-id>product_80_gridtable</item-id>
         <item-id>product_80_richtextbox</item-id>
       </group>
       <group>
         <group-id>button</group-id>
-        <item-id>product_80_registButton</item-id>
+        <item-id application-type="std">product_80_registButton</item-id>
+        <item-id application-type="imw,bis_wkf">product_80_imwModalRegisterButton</item-id>
+        <item-id application-type="bis_bf">product_80_bfRegistButton</item-id>
         <item-id>product_80_nextButton</item-id>
         <item-id>product_80_previousButton</item-id>
         <item-id>product_80_returnButton</item-id>
-        <item-id>product_80_tempButton</item-id>
-        <item-id application-type="imw">product_80_recycleButton</item-id>
+        <item-id application-type="std">product_80_tempButton</item-id>
+        <item-id application-type="imw,bis_wkf">product_80_imwModalTempButton</item-id>
+        <item-id application-type="imw,bis_wkf,bis_bf">product_80_recycleButton</item-id>
+        <item-id application-type="imw,bis_wkf">product_80_imwDirectRunButton</item-id>
+        <item-id application-type="imw,bis_wkf">product_80_imwDirectStopButton</item-id>
+        <item-id application-type="imw,bis_wkf">product_80_imwDirectBackButton</item-id>
       </group>
       <group>
         <group-id>master</group-id>
@@ -111,13 +142,13 @@
         <item-id>product_72_departmentPostSelect</item-id>
         <item-id>product_72_affiliationSelect</item-id>
       </group>
-      <group application-type="imw">
+      <group application-type="imw,bis_wkf,bis_bf">
         <group-id>workflow</group-id>
         <item-id>product_72_imwMatterData</item-id>
         <item-id>product_72_imwMatterFile</item-id>
         <item-id>product_72_imwMatterImage</item-id>
         <item-id>product_72_imwMatterHistory</item-id>
-        <item-id>product_72_imwConfirmHistory</item-id>
+        <item-id application-type="imw,bis_wkf">product_72_imwConfirmHistory</item-id>
         <item-id>product_72_imwStampList</item-id>
       </group>
       <group>
@@ -126,6 +157,9 @@
         <item-id>product_72_script</item-id>
         <item-id>product_80_eventButton</item-id>
         <item-id>product_72_formaAutoNo</item-id>
+        <item-id>product_80_fileImport</item-id>
+        <item-id>product_80_fileExport</item-id>
+        <item-id>product_80_iframe</item-id>
         <item-id>product_extend_viewer</item-id>
       </group>
       <group>
@@ -137,8 +171,20 @@
         <item-id>product_72_image</item-id>
         <item-id>product_72_label</item-id>
       </group>
+      <group>
+        <group-id>deprecated</group-id>
+        <item-id>product_72_itemSelect</item-id>
+        <item-id>product_72_table</item-id>
+        <item-id>product_72_checkbox</item-id>
+        <item-id>product_72_radio</item-id>
+        <item-id>product_72_selectbox</item-id>
+        <item-id>product_72_listbox</item-id>
+        <item-id application-type="imw,bis_wkf">product_80_registButton</item-id>
+        <item-id application-type="imw,bis_wkf">product_80_tempButton</item-id>
+      </group>
     </default-grouping>
     <page-path>forma/designer/form_designer_toolkit</page-path>
+    <css-path>forma/css/bis-forma-ui-icons.css</css-path>
   </toolkit-setting>
   <!-- 一覧表示件数 関連設定（設定変更可能） -->
   <listdisplay-setting>
@@ -149,7 +195,7 @@
   </listdisplay-setting>
   <!-- テーブル作成 関連設定（設定変更可能） -->
   <table-setting>
-    <!--  データ型 文字列 -->
+    <!-- データ型 文字列 -->
     <data_type_string>varchar</data_type_string>
     <!-- データ型 数値 -->
     <data_type_number>decimal</data_type_number>
@@ -161,18 +207,18 @@
     <data_type_binary>bytea</data_type_binary>
     <!-- テーブル名最大文字数 -->
     <table_name_max_length>30</table_name_max_length>
-    <!--  列名最大文字数 -->
+    <!-- 列名最大文字数 -->
     <column_name_max_length>30</column_name_max_length>
   </table-setting>
   <!-- imw連携情報（設定変更可能） -->
   <imw-setting>
-    <!-- アプリケーション種別がIM-Workflowの場合、メニュー設定タブを表示する場合true/非表示の場合false -->
+    <!-- アプリケーション種別がim-workflowの場合、メニュー設定タブを表示する場合true/非表示の場合false -->
     <!-- true/falseを設定してください。 -->
     <show_menu_tab>false</show_menu_tab>
-    <!-- アプリケーション種別がIM-Workflowの場合、一覧表示設定タブを表示する場合true/非表示の場合false -->
+    <!-- アプリケーション種別がim-workflowの場合、一覧表示設定タブを表示する場合true/非表示の場合false -->
     <!-- true/falseを設定してください。 -->
     <show_list_item_disp_tab>false</show_list_item_disp_tab>
-    <!-- アプリケーション種別がIM-Workflowの場合、権限設定タブを表示する場合true/非表示の場合false -->
+    <!-- アプリケーション種別がim-workflowの場合、権限設定タブを表示する場合true/非表示の場合false -->
     <!-- true/falseを設定してください。 -->
     <show_auth_setting_tab>false</show_auth_setting_tab>
   </imw-setting>
@@ -199,8 +245,8 @@
   </smartphone-setting>
   <!-- ヘルプのURLを設定します -->
   <help-setting>
-    <itemHelpUrl>http://www.intra-mart.jp/document/library/forma/public/forma_designer_help/item_help/common/item/</itemHelpUrl>
-    <designerHelpUrl>http://www.intra-mart.jp/document/library/forma/public/forma_designer_help/designer_help/forma.html</designerHelpUrl>
+    <itemHelpUrl>http://www.intra-mart.jp/document/library/bis/public/bis_designer_help/item_help/common/item/</itemHelpUrl>
+    <designerHelpUrl>http://www.intra-mart.jp/document/library/bis/public/bis_designer_help/designer_help/bis.html</designerHelpUrl>
   </help-setting>
   <!-- フォント設定（設定変更可能） -->
   <font-setting>
@@ -288,6 +334,7 @@
     <retry-max>10</retry-max>
   </auto-no-setting>
   <escape-full-width-percent-and-underscore-flag>false</escape-full-width-percent-and-underscore-flag>
+  <external-linkage-db-query-max-rows>1000</external-linkage-db-query-max-rows>
   <transaction-file-location>
     <fileupload>db</fileupload>
   </transaction-file-location>

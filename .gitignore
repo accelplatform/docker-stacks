@@ -1,13 +1,17 @@
-﻿data/cassandra/
+data/cassandra/
 data/juggling/repository/
 data/juggling/war/
 data/juggling/public/
 data/juggling/imart.war
 data/juggling/imart.zip
+data/juggling/.project-backup/
 data/mailpit/
 data/postgresql/
 data/resin/
 data/solr/
 data/httpd/
 
+.devcontainer/
 .DS_Store
+
+data/accelstudio-testing-agent/

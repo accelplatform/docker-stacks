@@ -1,4 +1,4 @@
-FROM amazoncorretto:11.0.28-alpine
+FROM amazoncorretto:11.0.32-alpine
 
 RUN apk update && apk add unzip procps bash && \
   rm -rf /var/cache/apk/*
