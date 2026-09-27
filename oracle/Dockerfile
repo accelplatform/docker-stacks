@@ -1,4 +1,4 @@
-FROM container-registry.oracle.com/database/free:23.26.1.0
+FROM container-registry.oracle.com/database/free:23.26.3.0
 
 USER root
 
