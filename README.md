@@ -10,12 +10,15 @@ Docker を利用した Accel Platform を動作させるためのスタンドア
 
 Accel Platform Docker stacks は、初期設定の状態で下記バージョンの環境を構築します。
 
-- intra-mart Accel Platform Professional Edition 2026 Spring
-  - IM-FormaDesigner 8.0.38
-  - IM-BIS 8.0.36
-  - IM-BloomMaker 8.0.16
-  - AccelStudio 8.0.9
-- PostgreSQL 17
+- intra-mart Accel Platform Professional Edition 2026 Autumn
+  - IM-FormaDesigner 8.0.39
+  - IM-BIS 8.0.37
+  - IM-BloomMaker 8.0.17
+  - Accel Studio 8.0.10
+  - IM-BPM 8.0.21
+  - Accel Orbit 8.0.0
+  - モジュール開発支援ライブラリ・標準デバッガ 8.0.4
+- PostgreSQL 18
 
 ## 前提条件
 
@@ -81,8 +84,7 @@ Accel Platform Docker stacks は、初期設定の状態で下記バージョン
 - cassandra: NoSQL データベース
 - accelstudio-testing-agent: Accel Studio テスト機能 テスト実行エージェント
 - mailpit: メールサーバ (Fake SMTP)
-- juggling-build-war: war, 静的ファイルのビルド
-- extract-imm: ユーザモジュール追加用
+- juggling-build-war: war, 静的ファイルのビルド（ユーザモジュールの追加を含む）
 
 ## クローン
 
@@ -91,10 +93,10 @@ Ubuntuのターミナルから実行してください。
 
 ```sh
 # Gitクローン
-git clone -b 2026spring-postgres https://github.com/accelplatform/docker-stacks.git
+git clone -b 2026autumn-postgres https://github.com/accelplatform/docker-stacks.git
 ```
 
-[Git LFS](../README.md#前提条件)をインストールしていない場合、imm/lib、juggling-build-war/libが正しくダウンロードできず、サイズが非常に小さいファイルになることがあります。  
+[Git LFS](../README.md#前提条件)をインストールしていない場合、juggling-build-war/overwrite/lib が正しくダウンロードできず、サイズが非常に小さいファイルになることがあります。  
 lib配下のファイルサイズが極端に小さい場合は、LFSがインストール、初期化されているかをご確認ください。
 
 ## 資材の準備
@@ -156,6 +158,9 @@ juggling プロジェクトを差し替える場合は[ユーザ作成のJugglin
 docker compose run --rm juggling-build-war
 ```
 
+ビルドでは `data/juggling/war` 及び `data/juggling/public` を削除して作り直します。  
+これらは Resin, Apache HTTPd が直接参照しているため、コンテナが起動済みの場合は `docker compose down` で停止してからビルドし、ビルド後に `docker compose up -d` で起動して下さい。
+
 ビルドが完了すると `data/juggling` ディレクトリ配下に成果物が配置されます。
 
 - `data/juggling/public`
@@ -169,10 +174,25 @@ docker compose run --rm juggling-build-war
 - `data/juggling/imart.zip`
   - 生成された静的ファイルです、**この Docker stack 実行時には利用されません。**
 
+##### ビルドパラメータ
+
+ビルドの内容は `.env` の以下の環境変数で変更できます。変更後は再ビルド不要で `docker compose run --rm juggling-build-war` に反映されます。
+
+| 環境変数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `JUGGLING_TEMPLATE` | `resin40` | アプリケーションサーバ (`resin40`=Resin 4.0 / `payara5`=Payara 5 / `weblogic12c`=WebLogic Server 12c / `was80`=WebSphere Application Server 8.0) |
+| `JUGGLING_ENV` | `ut` | 環境 (`ut`=単体テスト環境 / `si`=結合テスト環境 / `pt`=統合テスト環境 / `product`=運用環境) |
+| `JUGGLING_SAMPLE` | `true` | サンプルを含めるか |
+| `JUGGLING_TRIAL` | `false` | ライセンス種別 (`false`=製品版 / `true`=評価版) |
+| `JUGGLING_REPOSITORY_BASE` | `http://repository.intra-mart.jp/base` | ベースモジュールのリポジトリ |
+| `JUGGLING_REPOSITORY_APP` | `http://repository.intra-mart.jp/app` | アプリケーションモジュールのリポジトリ |
+
+プロジェクトの検証結果が `NG` の場合、ビルドは中断されます。検証結果を承知の上でビルドを続行する場合は `JUGGLING_ALLOW_VALIDATION_NG=true` を指定してください。
+
 ##### tips
 
-jugglingプロジェクトを差し替えることなく、ユーザプロジェクトを展開することも可能です。  
-[ユーザモジュールの追加展開](#ユーザモジュールの追加展開)を参照してください。
+IM-Juggling を使わずに、jugglingプロジェクトへユーザモジュールを追加することも可能です。  
+[ユーザモジュールの追加](#ユーザモジュールの追加)を参照してください。
 
 ## 起動
 
@@ -343,36 +363,19 @@ docker compose down accelstudio-testing-agent
 
 #### バージョンによるエラー
 
-テスト実行時に以下のようなログメッセージのエラーが出る場合は、`.env`ファイルの`ACCELSTUDIO_TESTING_AGENT_PLAYWRIGHT_VERSION`のバージョンを更新してください。（下記ログの例なら1.60.0に更新）
+Playwrightのブラウザが見つからない、またはバージョン不一致のエラーが出る場合は、`data/accelstudio-testing-agent/logs/accel_studio_testing_agent.log` を確認してください。
 
-data/accelstudio-testing-agent/logs/accel_studio_testing_agent.log
-
-```
-??????????????????????????????????????????????????????????
-? Looks like Playwright was just updated to 1.60.0.      ?
-? Please update docker image as well.                    ?
-? -  current: mcr.microsoft.com/playwright:v1.59.1-noble ?
-? - required: mcr.microsoft.com/playwright:v1.60.0-noble ?
-?                                                        ?
-? <3 Playwright Team                                     ?
-??????????????????????????????????????????????????????????
-```
-
-## ユーザモジュールの追加展開
-
-ユーザモジュール（immファイル）を環境に適用する機能です。
-
-これは、開発用途を考えた機能であり、本番環境での利用は推奨されません。  
-本番環境の場合は Juggling プロジェクトへモジュールを追加し、ビルドを行って下さい。
-
-以下のコマンドを実行することにより、イメージをビルドします。
+本構成はPlaywright本体とMCPが使用するライブラリ・ブラウザをビルド時に準備します。`.env` の `ACCELSTUDIO_TESTING_AGENT_PLAYWRIGHT_VERSION` または `ACCELSTUDIO_TESTING_AGENT_PLAYWRIGHT_MCP_VERSION` を変更した場合、環境変数の変更だけではライブラリとブラウザは更新されません。対応する組合せを確認したうえで、イメージを再ビルドしてコンテナを再作成してください。
 
 ```sh
-# ユーザモジュールの追加展開イメージのビルド
-docker compose build --no-cache extract-imm
+docker compose build --pull accelstudio-testing-agent
+docker compose up -d --force-recreate accelstudio-testing-agent
 ```
 
-### 追加展開
+## ユーザモジュールの追加
+
+IM-Juggling を使わずに、ユーザモジュール（immファイル）を Juggling プロジェクトへ追加する機能です。  
+追加したユーザモジュールを含めて war, 静的ファイルがビルドされます。
 
 `data/juggling/additional-modules`配下に独自に作成されたユーザモジュール（immファイル）を配置して下さい。
 
@@ -384,16 +387,35 @@ docker-stacks/
             └── <ユーザモジュール>.imm
 ```
 
-以下のコマンドを実行することにより、ユーザモジュールを `data/juggling/public` 及び `data/juggling/war` に展開します。
+以下のコマンドを実行することにより、配置したユーザモジュールを Juggling プロジェクトへ取り込んだ上で、[war, 静的ファイルのビルド](#war-静的ファイルのビルド)を行います。
 
 ```sh
-# ユーザモジュールの追加展開
-docker compose run --rm extract-imm
-# Resinの再起動
-docker compose restart resin
-# Apache HTTPdの再起動
-docker compose restart httpd
+# コンテナの停止
+docker compose down
+# war, 静的ファイルのビルド
+docker compose run --rm juggling-build-war
+# コンテナの起動
+docker compose up -d
 ```
+
+ユーザモジュールは以下のように扱われます。
+
+- モジュールIDが Juggling プロジェクトのユーザモジュールと一致する場合は、そのユーザモジュールを差し替えます（バージョンが異なる場合も差し替えます）。
+- モジュールIDが一致するユーザモジュールが無い場合は、ユーザモジュールとして追加します。
+- モジュールIDが Juggling プロジェクトの構成モジュール（リポジトリから取得するモジュール）と重複する場合はエラーとなります。
+
+### Juggling プロジェクトへの反映について
+
+取り込みは `data/juggling/project` を上書きする形で行われます（immファイルを `data/juggling/project/modules` へコピーし、`juggling.im` を更新します）。  
+そのため、IM-Juggling で `data/juggling/project` を開くと、追加したユーザモジュールがユーザモジュールとして表示されます。  
+差し替えを行った場合、置き換えられた古いimmファイルは `data/juggling/project/modules` から削除されます。
+
+一度取り込んだ後に `data/juggling/additional-modules` からimmファイルを削除しても、Juggling プロジェクトからは削除されません。  
+Juggling プロジェクトから取り除く場合は、IM-Juggling でユーザモジュールを削除して下さい。
+
+取り込み後に検証結果が `NG` となった場合やビルドに失敗した場合は、Juggling プロジェクトを取り込み前の状態へ戻します。  
+（差し替えでは古いimmファイルが失われ、juggling.im の履歴にも残らないため、失敗時は元の状態を復元します。）  
+復元した場合はその旨がログに出力されます。復元自体に失敗した場合は、取り込み前のプロジェクトが `data/juggling/.project-backup` に残ります。
 
 ## 参考
 
@@ -489,3 +511,23 @@ docker compose restart resin
 # Apache HTTPdの再起動
 docker compose restart httpd
 ```
+
+## 2026 Autumnでの変更とデータ保存
+
+PostgreSQL 18ではホストの `data/postgresql` をコンテナの `/var/lib/postgresql` にマウントし、実データはその配下の `18/docker` に保存します。PostgreSQL 17以前のデータをこの構成へ直接接続しないでください。既存データの移行は、バックアップと復旧方法を確認した別作業として行ってください。
+
+旧velbenchの個別IMM追加は廃止し、Accel Orbitの標準組み込みを使用します。デバッガも標準組み込みを使用するため、旧IMMを `additional-modules` などへ追加する必要はありません。標準デバッガの版番号は8.0.4です。
+
+SolrはAutumn向けに提供された `solr.zip` を使用します。同じ9.6.0-1の版表示でも、旧資材には追加のベクトル次元とインデックス付きメタデータ用のスキーマ定義がありません。既存環境の資材をそのまま流用せず、Autumn向け資材を配置してイメージを再ビルドしてください。
+
+Resin・Solr・CassandraのJavaは11系、テストエージェントは17系を維持しています。JDBCはPostgreSQL 42.7.13を使用します。テストエージェントはビルド時にPlaywrightとMCPのライブラリ・ブラウザを準備し、起動時にその `node_modules` を使用します。`.env` のPlaywrightとMCPの版を変更した場合は、エージェントイメージを再ビルドしてください。
+
+本構成は開発用の新規環境向けです。実測した動作条件と未確認事項は検証記録に従ってください。
+
+### 検証範囲と公開版での再確認
+
+2026-09-27にmacOS 27.0（Apple Silicon arm64）、Docker Desktop 4.92.0 / Engine 29.8.0 / Compose 5.5.1で、新規環境のビルド・WAR生成・起動とテナントセットアップ全2852件の成功（エラー0件）を確認しました。DB実測版はPostgreSQL 18.6です。Docker VMは8 CPU・11.67GiB、検証時のみCassandraのヒープを512MiB（new世代128MiB）に制限しています。このヒープ上書きは配布設定には含めていません。
+
+2026 Autumnの検証合格基準は、新規環境でのイメージビルド、WAR生成、サービス起動、テナントセットアップの完了です。セットアップ後の機能別動作、テストエージェントの認証付き実行、障害時の切替は、この検証の対象に含みません。
+
+提供されたAutumn雛形と先行資材を基準にしています。公開配布経路からのAutumn資材取得・再検証、およびAutumnの公式動作要件への適合確認は未完了です。配布設定の取得先は公開URLを使用しています。公開後に資材を再取得し、同じ手順でセットアップを確認してください。今回の検証ではライセンスの追加準備は不要でした。

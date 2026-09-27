@@ -1,4 +1,4 @@
-FROM amazoncorretto:11.0.28-alpine
+FROM amazoncorretto:11.0.32-alpine
 
 WORKDIR /opt
 
