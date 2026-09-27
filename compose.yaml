@@ -91,21 +91,17 @@ services:
     volumes:
       - ./data/mailpit:/data
   juggling-build-war:
-    image: $DOCKER_IMAGE_REPOSITORY/${DOCKER_IMAGE_TAG_PREFIX}juggling-build-war:1.0.7
+    image: $DOCKER_IMAGE_REPOSITORY/${DOCKER_IMAGE_TAG_PREFIX}juggling-build-war:0.1.5
     build:
       context: ./juggling-build-war
     environment:
       - TZ=$TZ
-    volumes:
-      - ./data/juggling:/data
-    profiles:
-      - prepare
-  extract-imm:
-    image: $DOCKER_IMAGE_REPOSITORY/${DOCKER_IMAGE_TAG_PREFIX}extract-imm:1.0.0
-    build:
-      context: ./imm
-    environment:
-      - TZ=$TZ
+      - JUGGLING_TEMPLATE=$JUGGLING_TEMPLATE
+      - JUGGLING_ENV=$JUGGLING_ENV
+      - JUGGLING_SAMPLE=$JUGGLING_SAMPLE
+      - JUGGLING_TRIAL=$JUGGLING_TRIAL
+      - JUGGLING_REPOSITORY_BASE=$JUGGLING_REPOSITORY_BASE
+      - JUGGLING_REPOSITORY_APP=$JUGGLING_REPOSITORY_APP
     volumes:
       - ./data/juggling:/data
     profiles:

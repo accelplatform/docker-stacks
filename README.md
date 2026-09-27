@@ -83,8 +83,7 @@ Accel Platform Docker stacks は、初期設定の状態で下記バージョン
 - cassandra: NoSQL データベース
 - accelstudio-testing-agent: Accel Studio テスト機能 テスト実行エージェント
 - mailpit: メールサーバ (Fake SMTP)
-- juggling-build-war: war, 静的ファイルのビルド
-- extract-imm: ユーザモジュール追加用
+- juggling-build-war: war, 静的ファイルのビルド（ユーザモジュールの追加を含む）
 
 ## クローン
 
@@ -96,7 +95,7 @@ Ubuntuのターミナルから実行してください。
 git clone -b 2026spring-oracle https://github.com/accelplatform/docker-stacks.git
 ```
 
-[Git LFS](../README.md#前提条件)をインストールしていない場合、imm/lib、juggling-build-war/libが正しくダウンロードできず、サイズが非常に小さいファイルになることがあります。  
+[Git LFS](../README.md#前提条件)をインストールしていない場合、juggling-build-war/overwrite/lib が正しくダウンロードできず、サイズが非常に小さいファイルになることがあります。  
 lib配下のファイルサイズが極端に小さい場合は、LFSがインストール、初期化されているかをご確認ください。
 
 ## 資材の準備
@@ -170,6 +169,9 @@ juggling プロジェクトを差し替える場合は[ユーザ作成のJugglin
 docker compose run --rm juggling-build-war
 ```
 
+ビルドでは `data/juggling/war` 及び `data/juggling/public` を削除して作り直します。  
+これらは Resin, Apache HTTPd が直接参照しているため、コンテナが起動済みの場合は `docker compose down` で停止してからビルドし、ビルド後に `docker compose up -d` で起動して下さい。
+
 ビルドが完了すると `data/juggling` ディレクトリ配下に成果物が配置されます。
 
 - `data/juggling/public`
@@ -183,10 +185,25 @@ docker compose run --rm juggling-build-war
 - `data/juggling/imart.zip`
   - 生成された静的ファイルです、**この Docker stack 実行時には利用されません。**
 
+##### ビルドパラメータ
+
+ビルドの内容は `.env` の以下の環境変数で変更できます。変更後は再ビルド不要で `docker compose run --rm juggling-build-war` に反映されます。
+
+| 環境変数 | 既定値 | 説明 |
+| --- | --- | --- |
+| `JUGGLING_TEMPLATE` | `resin40` | アプリケーションサーバ (`resin40`=Resin 4.0 / `payara5`=Payara 5 / `weblogic12c`=WebLogic Server 12c / `was80`=WebSphere Application Server 8.0) |
+| `JUGGLING_ENV` | `ut` | 環境 (`ut`=単体テスト環境 / `si`=結合テスト環境 / `pt`=統合テスト環境 / `product`=運用環境) |
+| `JUGGLING_SAMPLE` | `true` | サンプルを含めるか |
+| `JUGGLING_TRIAL` | `false` | ライセンス種別 (`false`=製品版 / `true`=評価版) |
+| `JUGGLING_REPOSITORY_BASE` | `http://repository.intra-mart.jp/base` | ベースモジュールのリポジトリ |
+| `JUGGLING_REPOSITORY_APP` | `http://repository.intra-mart.jp/app` | アプリケーションモジュールのリポジトリ |
+
+プロジェクトの検証結果が `NG` の場合、ビルドは中断されます。検証結果を承知の上でビルドを続行する場合は `JUGGLING_ALLOW_VALIDATION_NG=true` を指定してください。
+
 ##### tips
 
-jugglingプロジェクトを差し替えることなく、ユーザプロジェクトを展開することも可能です。  
-[ユーザモジュールの追加展開](#ユーザモジュールの追加展開)を参照してください。
+IM-Juggling を使わずに、jugglingプロジェクトへユーザモジュールを追加することも可能です。  
+[ユーザモジュールの追加](#ユーザモジュールの追加)を参照してください。
 
 ## 起動
 
@@ -410,21 +427,10 @@ data/accelstudio-testing-agent/logs/accel_studio_testing_agent.log
 ??????????????????????????????????????????????????????????
 ```
 
-## ユーザモジュールの追加展開
+## ユーザモジュールの追加
 
-ユーザモジュール（immファイル）を環境に適用する機能です。
-
-これは、開発用途を考えた機能であり、本番環境での利用は推奨されません。  
-本番環境の場合は Juggling プロジェクトへモジュールを追加し、ビルドを行って下さい。
-
-以下のコマンドを実行することにより、イメージをビルドします。
-
-```sh
-# ユーザモジュールの追加展開イメージのビルド
-docker compose build --no-cache extract-imm
-```
-
-### 追加展開
+IM-Juggling を使わずに、ユーザモジュール（immファイル）を Juggling プロジェクトへ追加する機能です。  
+追加したユーザモジュールを含めて war, 静的ファイルがビルドされます。
 
 `data/juggling/additional-modules`配下に独自に作成されたユーザモジュール（immファイル）を配置して下さい。
 
@@ -436,16 +442,35 @@ docker-stacks/
             └── <ユーザモジュール>.imm
 ```
 
-以下のコマンドを実行することにより、ユーザモジュールを `data/juggling/public` 及び `data/juggling/war` に展開します。
+以下のコマンドを実行することにより、配置したユーザモジュールを Juggling プロジェクトへ取り込んだ上で、[war, 静的ファイルのビルド](#war-静的ファイルのビルド)を行います。
 
 ```sh
-# ユーザモジュールの追加展開
-docker compose run --rm extract-imm
-# Resinの再起動
-docker compose restart resin
-# Apache HTTPdの再起動
-docker compose restart httpd
+# コンテナの停止
+docker compose down
+# war, 静的ファイルのビルド
+docker compose run --rm juggling-build-war
+# コンテナの起動
+docker compose up -d
 ```
+
+ユーザモジュールは以下のように扱われます。
+
+- モジュールIDが Juggling プロジェクトのユーザモジュールと一致する場合は、そのユーザモジュールを差し替えます（バージョンが異なる場合も差し替えます）。
+- モジュールIDが一致するユーザモジュールが無い場合は、ユーザモジュールとして追加します。
+- モジュールIDが Juggling プロジェクトの構成モジュール（リポジトリから取得するモジュール）と重複する場合はエラーとなります。
+
+### Juggling プロジェクトへの反映について
+
+取り込みは `data/juggling/project` を上書きする形で行われます（immファイルを `data/juggling/project/modules` へコピーし、`juggling.im` を更新します）。  
+そのため、IM-Juggling で `data/juggling/project` を開くと、追加したユーザモジュールがユーザモジュールとして表示されます。  
+差し替えを行った場合、置き換えられた古いimmファイルは `data/juggling/project/modules` から削除されます。
+
+一度取り込んだ後に `data/juggling/additional-modules` からimmファイルを削除しても、Juggling プロジェクトからは削除されません。  
+Juggling プロジェクトから取り除く場合は、IM-Juggling でユーザモジュールを削除して下さい。
+
+取り込み後に検証結果が `NG` となった場合やビルドに失敗した場合は、Juggling プロジェクトを取り込み前の状態へ戻します。  
+（差し替えでは古いimmファイルが失われ、juggling.im の履歴にも残らないため、失敗時は元の状態を復元します。）  
+復元した場合はその旨がログに出力されます。復元自体に失敗した場合は、取り込み前のプロジェクトが `data/juggling/.project-backup` に残ります。
 
 ## 参考
 

@@ -1,0 +1,16 @@
+{
+  "name": "juggling-build-war",
+  "private": true,
+  "type": "module",
+  "description": "IM-Juggling プロジェクトから war / 静的ファイルをビルドする",
+  "license": "Apache-2.0",
+  "engines": {
+    "node": ">=22.19.0"
+  },
+  "scripts": {
+    "build": "node build.mjs"
+  },
+  "dependencies": {
+    "@intra-mart/juggling-core": "0.1.5"
+  }
+}
