@@ -37,7 +37,7 @@
     </xs:sequence>
     <xs:attribute name="tenant" type="xs:string" use="required" />
   </xs:complexType>
-  
+
   <xs:complexType name="driver">
     <xs:all>
       <xs:element name="api-key" type="xs:string" minOccurs="0" maxOccurs="1" />
@@ -46,6 +46,7 @@
       <xs:element name="api-version" type="xs:string" minOccurs="0" maxOccurs="1" />
       <xs:element name="retry-count" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="1" />
       <xs:element name="retry-wait" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="1" />
+      <xs:element name="use-max-completion-tokens" type="xs:boolean" minOccurs="0" maxOccurs="1" />
       <xs:element name="aws-region" type="xs:string" minOccurs="0" maxOccurs="1" />
       <xs:element name="aws-credentials-profile" type="xs:string" minOccurs="0" maxOccurs="1" />
       <xs:element name="aws-credentials-static" type="cd:aws-credentials-static" minOccurs="0" maxOccurs="1" />
