@@ -1,9 +1,11 @@
-FROM amazoncorretto:8-alpine-jdk
-
-RUN apk update && apk add apache-ant && \
-    rm -rf /var/cache/apk/*
+FROM node:22-alpine
 
 WORKDIR /app
-COPY . .
 
-ENTRYPOINT ["ant"]
+COPY package.json ./
+RUN npm install --omit=dev && npm cache clean --force
+
+COPY build.mjs ./
+COPY overwrite ./overwrite
+
+ENTRYPOINT ["node", "/app/build.mjs"]
