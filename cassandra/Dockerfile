@@ -1,4 +1,4 @@
-FROM amazoncorretto:11.0.32-alpine
+FROM amazoncorretto:11-alpine
 
 RUN apk add --no-cache libc6-compat
 
