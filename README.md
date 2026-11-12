@@ -236,9 +236,9 @@ docker-stacks/
 # カレントディレクトリをdocker-stacksにする
 cd docker-stacks
 # メイン（resin、httpd、sqlserver等）イメージのビルド
-docker compose build --no-cache
+docker compose build --pull --no-cache
 # war作成＋静的ファイル配置イメージのビルド
-docker compose build --no-cache juggling-build-war
+docker compose build --pull --no-cache juggling-build-war
 ```
 
 #### war, 静的ファイルのビルド
@@ -435,7 +435,7 @@ Accel Studio テスト機能 テスト実行エージェントはメインイメ
 
 ```sh
 # テスト実行エージェントイメージのビルド
-docker compose build --no-cache accelstudio-testing-agent
+docker compose build --pull --no-cache accelstudio-testing-agent
 ```
 
 ### 起動
