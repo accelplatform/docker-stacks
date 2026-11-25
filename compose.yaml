@@ -93,7 +93,7 @@ services:
     volumes:
       - ./data/mailpit:/data
   juggling-build-war:
-    image: $DOCKER_IMAGE_REPOSITORY/${DOCKER_IMAGE_TAG_PREFIX}juggling-build-war:0.1.5
+    image: $DOCKER_IMAGE_REPOSITORY/${DOCKER_IMAGE_TAG_PREFIX}juggling-build-war:latest
     build:
       context: ./juggling-build-war
     environment:
