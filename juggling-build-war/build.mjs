@@ -61,6 +61,18 @@ function choice(name, fallback, allowed) {
 	return value;
 }
 
+// 実際に読み込まれる juggling-core のバージョンを返す。
+// package.json では "latest" を指定しており、イメージをビルドした時点の最新版が入るため、ログで確認できるようにする。
+async function jugglingCoreVersion() {
+	try {
+		const entry = import.meta.resolve("@intra-mart/juggling-core");
+		const manifest = JSON.parse(await readFile(new URL("../package.json", entry), "utf8"));
+		return String(manifest.version);
+	} catch {
+		return "(unknown)";
+	}
+}
+
 // 出力先ファイルパスを exportWar / exportStatic のオプション形式 (拡張子なし) に分解する。
 function splitArtifactPath(path, extension) {
 	const name = basename(path);
@@ -299,6 +311,7 @@ async function main() {
 	const additionalModules = await listAdditionalModules(config.additionalModulesDir);
 
 	console.log("=== Configuration ===");
+	console.log(`  juggling-core       : ${await jugglingCoreVersion()}`);
 	console.log(`  project             : ${config.projectDir}`);
 	console.log(`  additional modules  : ${additionalModules.length === 0 ? "(none)" : additionalModules.map((path) => basename(path)).join(", ")}`);
 	console.log(`  local repository    : ${config.managedRepositoryPath}`);
