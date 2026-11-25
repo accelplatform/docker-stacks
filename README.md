@@ -144,6 +144,9 @@ docker compose build --pull --no-cache
 docker compose build --pull --no-cache juggling-build-war
 ```
 
+juggling-build-war はイメージのビルド時に npm から最新の `@intra-mart/juggling-core` を取得します。`--no-cache` を付けずにビルドすると以前に取得したバージョンが使われ続けるため、新しいバージョンを取り込む場合も上記のコマンドでビルドしてください。  
+使用されているバージョンは、war ビルド時のログの `=== Configuration ===` にある `juggling-core` の行で確認できます。
+
 #### war, 静的ファイルのビルド
 
 以下のコマンドにより `data/juggling/project` 配下の構成で war ファイルや静的ファイルをビルドする事ができます。  
